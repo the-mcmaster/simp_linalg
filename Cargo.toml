@@ -1,0 +1,9 @@
+[package]
+name = "simp_linalg"
+version = "0.1.0"
+edition = "2021"
+description = "A light-weight library for simple operations on mathematical vectors and matrixies"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
