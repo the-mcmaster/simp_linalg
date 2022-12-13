@@ -4,3 +4,7 @@ version = "0.1.0"
 edition = "2021"
 description = "A light-weight library for simple operations on mathematical vectors and matrixies."
 license = "MIT"
+documentation = "https://docs.rs/simp_linalg/"
+repository = "https://github.com/the-mcmaster/simp_linalg"
+
+#[dependencies]
