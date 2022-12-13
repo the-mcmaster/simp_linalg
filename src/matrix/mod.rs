@@ -1,9 +1,13 @@
+use std::ops::Add;
+#[deny(missing_doc_code_examples)]
+
 use std::ops::{Mul, AddAssign};
 
 use crate::vector::Vector;
 
 #[allow(dead_code)]
 #[derive(Debug, PartialEq, Eq)]
+/// The Matrix type.
 pub struct Matrix<T>
 {
     rows : usize,
@@ -31,7 +35,7 @@ where
     /// assert_eq!(col_matrix.to_vector(), Vector::from(vec![1, 2, 3]));
     /// ```
     /// # Panic!
-    /// This function will panic! if self.rows or self.cols are not equal to 1.
+    /// This function will panic! if neither self.rows nor self.cols are equal to 1.
     pub fn to_vector(self) -> Vector<T> {
         if self.rows == 1 {
             let mut params = vec![];
@@ -47,7 +51,7 @@ where
             }
             return Vector::new(params.len(), params);
         } else {
-            panic!("Cannot convert matrix because neither rows nor columns are 0")
+            panic!("Cannot convert matrix because neither rows nor columns are 1")
         }
     }
 
@@ -57,19 +61,31 @@ where
     }
 }
 
+/// # Panic!
+/// 
+/// This function will panic! each internal vec are not the same length
+/// ```
+/// use simp_linalg::matrix::Matrix;
+/// 
+/// let matrix1 = Matrix::from(vec![vec![1, 0],
+///                                 vec![1, 2]]);
+/// //This will fail.
+/// //let matrix2 = Matrix::from(vec![vec![1],
+/// //                                vec![1, 2]]);
+/// ```
 impl<T> From<Vec<Vec<T>>> for Matrix<T> {
-    fn from(vecs: Vec<Vec<T>>) -> Self {
-        let rows = vecs.len();
-        let cols = vecs[0].len();
+    fn from(params: Vec<Vec<T>>) -> Self {
+        let rows = params.len();
+        let cols = params[0].len();
         for row in 1..rows {
-            if vecs[row].len() != cols {
+            if params[row].len() != cols {
                 panic!("Input 2D Vec does not have same length for all rows")
             }
         }
         Matrix {
-            rows: rows,
-            cols: cols,
-            matrix : vecs
+            rows : params.len(),
+            cols : params[0].len(),
+            matrix : params
         }
     }
 }
@@ -108,7 +124,7 @@ where
 
     fn mul(self, rhs: Vector<T>) -> Self::Output {
         if rhs.size() != self.cols {
-            panic!("Matrix must have same number of columns as the vector has columns")
+            panic!("The matrix column count must be equal to the vector parameter count.")
         };
         let mut params = vec![];
         let vector_ptr = rhs.list().as_ptr();
@@ -128,7 +144,7 @@ where
             params.push(param)
         }
         
-        Vector::new(params.len(), params)
+        Vector::from(params)
     }
 }
 
@@ -169,7 +185,7 @@ where
 
     fn mul(self, rhs: Self) -> Self::Output {
         if self.cols != rhs.rows {
-            panic!("Left matrix must have same number of columns as the number of rows in right matrix to multiply")
+            panic!("The left matrix row count is not equal to the right matrix column count.")
         }
 
         let mut params: Vec<Vec<T>> = vec![vec![]; self.rows];
@@ -198,10 +214,29 @@ where
                 params[out_row_index].push(param)
             }
         }
-        Matrix{
-            rows : self.rows,
-            cols : rhs.cols,
-            matrix : params
+        Matrix::from(params)
+    }
+}
+
+/// [Addition][std::ops::Add] implementation of 'Matrix<T> + Matrix<T>'.
+impl<T> Add for Matrix<T>
+where
+    T: Add<Output = T> + Copy
+{
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        if self.rows != rhs.rows || self.cols != rhs.cols {
+            panic!("Differently sized matrices cannot be added together.")
         }
+
+        let mut params = vec![vec![]; self.rows];
+        for row_idx in 0..self.rows {
+            for col_idx in 0..self.cols {
+                params[row_idx].push(self.matrix[row_idx][col_idx] + rhs.matrix[row_idx][col_idx])
+            }
+        }
+
+        Matrix::from(params)
     }
 }
