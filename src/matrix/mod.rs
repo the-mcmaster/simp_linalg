@@ -33,7 +33,22 @@ where
     /// assert_eq!(col_matrix.into_vector(), Vector::from(vec![1, 2, 3]));
     /// ```
     /// # Panic!
-    /// This function will panic! if neither self.rows nor self.cols are equal to 1.
+    /// This function will panic if neither rows nor columns are equal to 1.
+    /// ## Example
+    /// ```
+    /// use simp_linalg::prelude::*;
+    /// 
+    /// let row_matrix = Matrix::from(vec![vec![1,2]]);
+    /// let col_matrix = Matrix::from(vec![vec![1],
+    ///                                    vec![2]]);
+    /// let both_matrix = Matrix::from(vec![vec![1,2],
+    ///                                     vec![3,4]]);
+    /// 
+    /// let vector1 = row_matrix.into_vector();
+    /// let vector2 = col_matrix.into_vector();
+    /// // Panics vvv
+    /// // let vector3 = both_matrix.into_vector();
+    /// ```
     pub fn into_vector(self) -> Vector<T> {
         if self.rows == 1 {
             let mut params = vec![];
@@ -59,7 +74,9 @@ where
 
 /// # Panic!
 /// 
-/// This function will panic! there exists a differently sized internal [vec][std::vec::Vec].
+/// This function will panic if there exists a differently sized internal [vec][std::vec::Vec].
+/// 
+/// ## Example
 /// ```
 /// use simp_linalg::matrix::Matrix;
 /// 
@@ -88,9 +105,9 @@ impl<T> From<Vec<Vec<T>>> for Matrix<T> {
 
 /// [Multiply][std::ops::Mul] implmentation of 'Matrix<T> * Vector<T>'.
 ///
-/// With valid inputs, this function will always produce a [Vector<T>][crate::vector::Vector].
 /// If this multiplicaiton needs to be a matrix, it can be converted by
-/// using the method [.to_row_matrix()][crate::vector::Vector] or [.to_col_matrix()][crate::vector::Vector] on the result of this multiplication
+/// using the method [.to_row_matrix()][crate::vector::Vector] or [.to_col_matrix()][crate::vector::Vector]
+/// on the result of this multiplication.
 ///
 /// # Example
 /// ```
@@ -108,7 +125,7 @@ impl<T> From<Vec<Vec<T>>> for Matrix<T> {
 /// 
 /// # Panic!
 /// This function will panic if the number of columns
-/// in [Matrix][crate::matrix::Matrix] is not the same as the amount of elements
+/// in [Matrix][crate::matrix::Matrix] are not equal to the amount of elements
 /// in [Vector][crate::vector::Vector].
 impl<T> Mul<&Vector<T>> for &Matrix<T>
 where
@@ -144,7 +161,6 @@ where
 
 /// [Multiply][std::ops::Mul] implementation of 'Matrix<T> * Matrix<T>'.
 /// 
-/// With valid inputs, this function will always produce a [Matrix<T>][crate::matrix::Matrix].
 /// If this matrix multiplicaiton has dimentions of a vector, it can be converted by
 /// using the method [.to_vector()][crate::matrix::Matrix] on the result of this multiplication.
 /// 
@@ -152,12 +168,11 @@ where
 /// ```
 /// use simp_linalg::matrix::Matrix;
 /// 
-/// let matrix1 = Matrix::from(vec![
-///                                 vec![1, 2],
+/// let matrix1 = Matrix::from(vec![vec![1, 2],
 ///                                 vec![3, 4],
 ///                                 vec![5, 6]]);
-/// let matrix2 = Matrix::from(vec![
-///                                 vec![8,  9,  10, 11],
+/// 
+/// let matrix2 = Matrix::from(vec![vec![8,  9,  10, 11],
 ///                                 vec![12, 13, 14, 15]]);
 /// 
 /// let matrix3 = &matrix1 * &matrix2;
@@ -168,8 +183,8 @@ where
 /// ```
 /// 
 /// # Panic!
-/// This funciton will panic if the number of columns
-/// in the left hand side [matrix][crate::matrix::Matrix] is not the same as the number of rows
+/// This function will panic if the number of columns
+/// in the left hand side [matrix][crate::matrix::Matrix] is not equal to the number of rows
 /// in the right hand side [matrix][crate::matrix::Matrix].
 impl<T> Mul for &Matrix<T>
 where
@@ -214,6 +229,29 @@ where
 }
 
 /// [Addition][std::ops::Add] implementation of 'Matrix<T> + Matrix<T>'.
+/// 
+/// # Example
+/// ```
+/// use simp_linalg::matrix::Matrix;
+/// 
+/// let matrix1 = Matrix::from(vec![vec![1, 2],
+///                                 vec![3, 4],
+///                                 vec![5, 6]]);
+/// 
+/// let matrix2 = Matrix::from(vec![vec![7,  8],
+///                                 vec![9,  10],
+///                                 vec![11, 12]]);
+/// 
+/// let matrix3 = &matrix1 + &matrix2;
+/// 
+/// assert_eq!(matrix3, Matrix::from(vec![vec![8,  10],
+///                                       vec![12, 14],
+///                                       vec![16, 18]]));
+/// ```
+/// 
+/// # Panic!
+/// This function will panic if the matrices are not
+/// equivalent in size.
 impl<T> Add for &Matrix<T>
 where
     T: Add<Output = T> + Copy
