@@ -1,12 +1,9 @@
 use std::ops::Add;
-#[deny(missing_doc_code_examples)]
-
 use std::ops::{Mul, AddAssign};
-
 use crate::vector::Vector;
 
 #[allow(dead_code)]
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 /// The Matrix type.
 pub struct Matrix<T>
 {
@@ -31,45 +28,44 @@ where
     /// let col_matrix = Matrix::from(vec![vec![1],
     ///                                    vec![2],
     ///                                    vec![3]]);
-    /// assert_eq!(row_matrix.to_vector(), Vector::from(vec![1, 2, 4]));
-    /// assert_eq!(col_matrix.to_vector(), Vector::from(vec![1, 2, 3]));
+    /// 
+    /// assert_eq!(row_matrix.into_vector(), Vector::from(vec![1, 2, 4]));
+    /// assert_eq!(col_matrix.into_vector(), Vector::from(vec![1, 2, 3]));
     /// ```
     /// # Panic!
     /// This function will panic! if neither self.rows nor self.cols are equal to 1.
-    pub fn to_vector(self) -> Vector<T> {
+    pub fn into_vector(self) -> Vector<T> {
         if self.rows == 1 {
             let mut params = vec![];
             for param in &self.matrix[0] {
                 params.push(*param)
             }
-            return Vector::new(params.len(), params)
+            return Vector::from(params)
         }
+        
         else if self.cols == 1 {
             let mut params: Vec<T> = vec![];
             for row in self.matrix {
                 params.push(row[0])
             }
-            return Vector::new(params.len(), params);
-        } else {
+            return Vector::from(params);
+        }
+        
+        else {
             panic!("Cannot convert matrix because neither rows nor columns are 1")
         }
-    }
-
-    /// Construct a new Matrix<T> 
-    pub fn new(rows: usize, cols: usize, matrix: Vec<Vec<T>>) -> Self {
-        Matrix {rows: rows, cols: cols, matrix: matrix}
     }
 }
 
 /// # Panic!
 /// 
-/// This function will panic! each internal vec are not the same length
+/// This function will panic! there exists a differently sized internal [vec][std::vec::Vec].
 /// ```
 /// use simp_linalg::matrix::Matrix;
 /// 
 /// let matrix1 = Matrix::from(vec![vec![1, 0],
 ///                                 vec![1, 2]]);
-/// //This will fail.
+/// //This will panic.
 /// //let matrix2 = Matrix::from(vec![vec![1],
 /// //                                vec![1, 2]]);
 /// ```
@@ -105,7 +101,7 @@ impl<T> From<Vec<Vec<T>>> for Matrix<T> {
 /// let matrix = Matrix::from(vec![vec![3, 4], 
 ///                                vec![5, 6]]);
 /// 
-/// let vector2 = matrix * vector1;
+/// let vector2 = &matrix * &vector1;
 /// 
 /// assert_eq!(vector2, Vector::from(vec![11, 17]))
 /// ```
@@ -114,23 +110,21 @@ impl<T> From<Vec<Vec<T>>> for Matrix<T> {
 /// This function will panic if the number of columns
 /// in [Matrix][crate::matrix::Matrix] is not the same as the amount of elements
 /// in [Vector][crate::vector::Vector].
-/// 
-/// # Safety
-impl<T> Mul<Vector<T>> for Matrix<T>
+impl<T> Mul<&Vector<T>> for &Matrix<T>
 where
     T: Copy + AddAssign + Mul<Output = T> + Default
 {
     type Output = Vector<T>;
 
-    fn mul(self, rhs: Vector<T>) -> Self::Output {
-        if rhs.size() != self.cols {
+    fn mul(self, rhs: &Vector<T>) -> Self::Output {
+        if rhs.len() != self.cols {
             panic!("The matrix column count must be equal to the vector parameter count.")
         };
         let mut params = vec![];
         let vector_ptr = rhs.list().as_ptr();
 
-        
-        for row in self.matrix {
+        // SAFTEY: The previous test guarentees that valid memory will be pointed to.
+        for row in &self.matrix {
             let mut param = T::default();
 
             let row_ptr = row.as_ptr();
@@ -166,7 +160,7 @@ where
 ///                                 vec![8,  9,  10, 11],
 ///                                 vec![12, 13, 14, 15]]);
 /// 
-/// let matrix3 = matrix1 * matrix2;
+/// let matrix3 = &matrix1 * &matrix2;
 /// 
 /// assert_eq!(matrix3, Matrix::from(vec![vec![32,  35,  38,  41],
 ///                                       vec![72,  79,  86,  93],
@@ -177,7 +171,7 @@ where
 /// This funciton will panic if the number of columns
 /// in the left hand side [matrix][crate::matrix::Matrix] is not the same as the number of rows
 /// in the right hand side [matrix][crate::matrix::Matrix].
-impl<T> Mul for Matrix<T>
+impl<T> Mul for &Matrix<T>
 where
     T: Copy + AddAssign + Mul<Output = T> + Default
 {
@@ -194,6 +188,7 @@ where
             for out_col_index in 0..rhs.cols {
                 let mut param = T::default();
                 
+                // SAFTEY: The previous test guarentees that valid memory will be pointed to.
                 for index in 0..self.cols {
                     //get the data from the lhs's row
                     let lhs_row_ptr = self.matrix[out_row_index].as_ptr();
@@ -219,11 +214,11 @@ where
 }
 
 /// [Addition][std::ops::Add] implementation of 'Matrix<T> + Matrix<T>'.
-impl<T> Add for Matrix<T>
+impl<T> Add for &Matrix<T>
 where
     T: Add<Output = T> + Copy
 {
-    type Output = Self;
+    type Output = Matrix<T>;
 
     fn add(self, rhs: Self) -> Self::Output {
         if self.rows != rhs.rows || self.cols != rhs.cols {
