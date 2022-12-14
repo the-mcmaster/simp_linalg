@@ -3,7 +3,7 @@ name = "simp_linalg"
 version = "0.1.1"
 edition = "2021"
 
-description = "A light-weight library for simple operations on mathematical vectors and matrixies."
+description = "A light-weight library for simple operations on mathematical vectors and matrices."
 license = "MIT"
 repository = "https://github.com/the-mcmaster/simp_linalg"
 keywords = ["linear algebra", "vector", "matrix"]
