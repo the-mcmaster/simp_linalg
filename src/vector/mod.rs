@@ -1,4 +1,4 @@
-mod prim_add_impl;
+mod prim_mul_impl;
 use std::ops::{Add, Mul, AddAssign};
 
 use crate::matrix::Matrix;
