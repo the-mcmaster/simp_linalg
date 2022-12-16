@@ -1,3 +1,5 @@
+mod prim_add_impl;
+
 use std::ops::{Add, Mul, AddAssign};
 
 use crate::matrix::Matrix;
@@ -112,6 +114,9 @@ impl<T> From<Vec<T>> for Vector<T>
     }
 }
 
+//
+//              Multiplication Implementations
+//
 /// The [Multiplication][std::ops::Mul] implementation for 'Vector * Vector'.
 /// 
 /// This calculates the dot product of the two vectors.
@@ -151,6 +156,9 @@ where
     }
 }
 
+//
+//                  Addition Implementations
+//
 /// The [Addition][std::ops::Add] implementation for 'Vector + Vector'.
 /// 
 /// # Example
