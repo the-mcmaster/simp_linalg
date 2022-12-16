@@ -76,6 +76,19 @@ impl<T> Vector<T>
         Matrix::from(vec![self.list])
     }
 
+    pub fn lambda<F>(&self, funct: F) -> Vector<T>
+    where
+        F: Fn(&T) -> T
+    {
+        let mut params = vec![];
+        
+        for item in self.list() {
+            params.push(funct(item))
+        }
+
+        Vector::from(params)
+    }
+
     /// Returns the length of the Vector<T>.
     pub fn len(&self) -> usize {
         self.list.len()
