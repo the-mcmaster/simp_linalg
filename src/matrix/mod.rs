@@ -1,3 +1,4 @@
+mod prim_mul_impl;
 use std::ops::Add;
 use std::ops::{Mul, AddAssign};
 use crate::vector::Vector;

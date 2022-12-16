@@ -194,3 +194,23 @@ where
         Vector::from(params)
     }
 }
+
+impl<T> Add<Vector<T>> for &Vector<T>
+where
+    T: Add<Output = T> + Copy
+{
+    type Output = Vector<T>;
+
+    fn add(self, rhs: Vector<T>) -> Self::Output {
+        if self.len() != rhs.len() {
+            panic!("Vectors with different sizes cannot be added together.")
+        }
+
+        let mut params = vec![];
+        for idx in 0..self.len() {
+            params.push(self.list[idx] + rhs.list[idx])
+        }
+
+        Vector::from(params)
+    }
+}
