@@ -4,7 +4,7 @@ mod add_impl;
 use crate::matrix::Matrix;
 
 #[allow(dead_code)]
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Default)]
 /// The Vector type.
 pub struct Vector<T>
 {
@@ -14,7 +14,7 @@ pub struct Vector<T>
 #[allow(dead_code)]
 impl<T> Vector<T>
 {
-    /// Converts a Vector<T> to a column Matrix<T>, consuming the Vector.
+    /// Converts a Vector into a column Matrix, consuming the Vector.
     /// 
     /// # Examples
     /// ```
@@ -49,7 +49,7 @@ impl<T> Vector<T>
         Matrix::from(matrix)
     }
 
-    /// Converts a Vector<T> to a row Matrix<T>, consuming the Vector.
+    /// Converts a Vector<T> into a row Matrix<T>, consuming the Vector.
     /// 
     /// # Examples
     /// ```
@@ -76,6 +76,20 @@ impl<T> Vector<T>
         Matrix::from(vec![self.list])
     }
 
+    /// Applies an anonymous function to each element of the vector
+    /// and return a vector with the corresponding results.
+    /// 
+    /// # Example
+    /// ```
+    /// use simp_linalg::vector::Vector;
+    /// 
+    /// let vector_x = Vector::from(vec![1, 2, 3]);
+    /// 
+    /// // squares each element in vector_x
+    /// let vector_y = vector_x.lambda(|val| val * val);
+    /// 
+    /// assert_eq!(vector_y, Vector::from(vec![1, 4, 9]))
+    /// ```
     pub fn lambda<F>(&self, funct: F) -> Vector<T>
     where
         F: Fn(&T) -> T
@@ -100,9 +114,9 @@ impl<T> Vector<T>
     }
 }
 
-/// Converts a Vec<T> to a Vector<T>
+/// Converts a [Vec][std::vec::Vec] to a Vector.
 /// 
-/// This function will never fail since a vector can
+/// This function will never fail since a Vector can
 /// be constructed with any valid [std::vec::Vec]. However,
 /// the methods available are based upon the Vector's internal
 /// type's traits, such as multiplcation and addition.

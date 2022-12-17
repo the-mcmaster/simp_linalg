@@ -6,7 +6,7 @@ use crate::vector::Vector;
 //          Borrowed/Borrowed Implementation
 //
 //
-/// The [Multiplication][std::ops::Mul] implementation for '&Vector * &Vector'.
+/// The [multiplication][std::ops::Mul] implementation for '&Vector * &Vector'.
 /// 
 /// This calculates the dot product of the two vectors.
 /// 
@@ -51,6 +51,25 @@ where
 //          Borrowed/Owned Implementation
 //
 //
+/// The [multiplication][std::ops::Mul] implementation for '&Vector * Vector'.
+/// 
+/// This calculates the dot product of the two vectors.
+/// 
+/// # Example
+/// ```
+/// use simp_linalg::vector::Vector;
+/// 
+/// let vector1 = Vector::from(vec![1, 2, 3]);
+/// let vector2 = Vector::from(vec![4, 5, 6]);
+/// 
+/// // Notice 'vector2' is moved here.
+/// let value = &vector1 * vector2;
+/// 
+/// assert_eq!(value, 32)
+/// ```
+/// 
+/// # Panic!
+/// This function will panic if the vectors are not the same size.
 impl<T> Mul<Vector<T>> for &Vector<T>
 where
     T: Copy + Mul<Output = T> + AddAssign + Default
@@ -78,6 +97,25 @@ where
 //          Owned/Borrowed Implementation
 //
 //
+/// The [multiplication][std::ops::Mul] implementation for 'Vector * &Vector'.
+/// 
+/// This calculates the dot product of the two vectors.
+/// 
+/// # Example
+/// ```
+/// use simp_linalg::vector::Vector;
+/// 
+/// let vector1 = Vector::from(vec![1, 2, 3]);
+/// let vector2 = Vector::from(vec![4, 5, 6]);
+/// 
+/// // Notice 'vector1' is moved here.
+/// let value = vector1 * &vector2;
+/// 
+/// assert_eq!(value, 32)
+/// ```
+/// 
+/// # Panic!
+/// This function will panic if the vectors are not the same size.
 impl<T> Mul<&Vector<T>> for Vector<T>
 where
     T: Copy + Mul<Output = T> + AddAssign + Default
@@ -105,6 +143,25 @@ where
 //          Owned/Owned Implementation
 //
 //
+/// The [multiplication][std::ops::Mul] implementation for 'Vector * Vector'.
+/// 
+/// This calculates the dot product of the two vectors.
+/// 
+/// # Example
+/// ```
+/// use simp_linalg::vector::Vector;
+/// 
+/// let vector1 = Vector::from(vec![1, 2, 3]);
+/// let vector2 = Vector::from(vec![4, 5, 6]);
+/// 
+/// // Notice 'vector1' and 'vector2' are moved here.
+/// let value = vector1 * &vector2;
+/// 
+/// assert_eq!(value, 32)
+/// ```
+/// 
+/// # Panic!
+/// This function will panic if the vectors are not the same size.
 impl<T> Mul for Vector<T>
 where
     T: Copy + Mul<Output = T> + AddAssign + Default
@@ -132,6 +189,19 @@ where
 //          Borrowed/Scalar Implementation
 //
 //
+/// The [multiplication][std::ops::Mul] implementation for '&Vector * T'.
+/// 
+/// In contrast to common mathematical notation,
+/// the scalar must be on the right of the vector.
+/// 
+/// # Example
+/// ```
+/// use simp_linalg::vector::Vector;
+/// 
+/// let vector = Vector::from(vec![1, 2, 3]);
+/// 
+/// assert_eq!(&vector * 3, Vector::from(vec![3, 6, 9]))
+/// ```
 impl<T> Mul<T> for &Vector<T>
 where
     T: Copy + Mul<Output = T>
@@ -152,6 +222,20 @@ where
 //          Owned/Scalar Implementation
 //
 //
+/// The [multiplication][std::ops::Mul] implementation for '&Vector * T'.
+/// 
+/// In contrast to common mathematical notation,
+/// the scalar must be on the right of the vector.
+/// 
+/// # Example
+/// ```
+/// use simp_linalg::vector::Vector;
+/// 
+/// let vector = Vector::from(vec![1, 2, 3]);
+/// 
+/// // Notice that the vector is moved here.
+/// assert_eq!(vector * 3, Vector::from(vec![3, 6, 9]))
+/// ```
 impl<T> Mul<T> for Vector<T>
 where
     T: Copy + Mul<Output = T>
