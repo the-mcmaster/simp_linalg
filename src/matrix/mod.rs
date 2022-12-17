@@ -3,7 +3,7 @@ mod add_impl;
 use crate::vector::Vector;
 
 #[allow(dead_code)]
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Default)]
 /// The Matrix type.
 pub struct Matrix<T>
 {
@@ -69,6 +69,16 @@ where
         else {
             panic!("Cannot convert matrix because neither rows nor columns are 1")
         }
+    }
+
+    /// Returns the number of rows of the Matrix<T>.
+    pub fn rows(&self) -> usize {
+        self.rows
+    }
+
+    /// Returns the number of columns of the Matrix<T>.
+    pub fn cols(&self) -> usize {
+        self.cols
     }
 }
 
