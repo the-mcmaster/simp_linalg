@@ -132,7 +132,6 @@ where
 //          Borrowed/Scalar Implementation
 //
 //
-
 impl<T> Mul<T> for &Vector<T>
 where
     T: Copy + Mul<Output = T>
@@ -153,7 +152,6 @@ where
 //          Owned/Scalar Implementation
 //
 //
-
 impl<T> Mul<T> for Vector<T>
 where
     T: Copy + Mul<Output = T>
