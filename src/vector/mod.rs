@@ -1,9 +1,10 @@
-use std::ops::{Add, Mul, AddAssign};
+mod mul_impl;
+mod add_impl;
 
 use crate::matrix::Matrix;
 
 #[allow(dead_code)]
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Default)]
 /// The Vector type.
 pub struct Vector<T>
 {
@@ -13,7 +14,7 @@ pub struct Vector<T>
 #[allow(dead_code)]
 impl<T> Vector<T>
 {
-    /// Converts a Vector<T> to a column Matrix<T>, consuming the Vector.
+    /// Converts a Vector into a column Matrix, consuming the Vector.
     /// 
     /// # Examples
     /// ```
@@ -48,7 +49,7 @@ impl<T> Vector<T>
         Matrix::from(matrix)
     }
 
-    /// Converts a Vector<T> to a row Matrix<T>, consuming the Vector.
+    /// Converts a Vector<T> into a row Matrix<T>, consuming the Vector.
     /// 
     /// # Examples
     /// ```
@@ -75,6 +76,33 @@ impl<T> Vector<T>
         Matrix::from(vec![self.list])
     }
 
+    /// Applies an anonymous function to each element of the vector
+    /// and return a vector with the corresponding results.
+    /// 
+    /// # Example
+    /// ```
+    /// use simp_linalg::vector::Vector;
+    /// 
+    /// let vector_x = Vector::from(vec![1, 2, 3]);
+    /// 
+    /// // squares each element in vector_x
+    /// let vector_y = vector_x.lambda(|val| val * val);
+    /// 
+    /// assert_eq!(vector_y, Vector::from(vec![1, 4, 9]))
+    /// ```
+    pub fn lambda<F>(&self, funct: F) -> Vector<T>
+    where
+        F: Fn(&T) -> T
+    {
+        let mut params = vec![];
+        
+        for item in self.list() {
+            params.push(funct(item))
+        }
+
+        Vector::from(params)
+    }
+
     /// Returns the length of the Vector<T>.
     pub fn len(&self) -> usize {
         self.list.len()
@@ -86,9 +114,9 @@ impl<T> Vector<T>
     }
 }
 
-/// Converts a Vec<T> to a Vector<T>
+/// Converts a [Vec][std::vec::Vec] to a Vector.
 /// 
-/// This function will never fail since a vector can
+/// This function will never fail since a Vector can
 /// be constructed with any valid [std::vec::Vec]. However,
 /// the methods available are based upon the Vector's internal
 /// type's traits, such as multiplcation and addition.
@@ -109,81 +137,5 @@ impl<T> From<Vec<T>> for Vector<T>
         Vector {
             list : vec
         }
-    }
-}
-
-/// The [Multiplication][std::ops::Mul] implementation for 'Vector * Vector'.
-/// 
-/// This calculates the dot product of the two vectors.
-/// 
-/// # Example
-/// ```
-/// use simp_linalg::vector::Vector;
-/// 
-/// let vector1 = Vector::from(vec![1, 2, 3]);
-/// let vector2 = Vector::from(vec![4, 5, 6]);
-/// 
-/// let value = &vector1 * &vector2;
-/// 
-/// assert_eq!(value, 32)
-/// ```
-/// 
-/// # Panic!
-/// This function will panic if the vectors are not the same size.
-impl<T> Mul for &Vector<T>
-where
-    T: Copy + Mul<Output = T> + AddAssign + Default
-{
-    type Output = T;
-
-    fn mul(self, rhs: Self) -> Self::Output {
-        if self.len() != rhs.len() {
-            panic!("Cannot find dot product of two differently sized vectors.")
-        }
-
-        let mut product = T::default();
-        
-        for idx in 0..self.len() {
-            product += self.list[idx] * rhs.list[idx]
-        }
-
-        product
-    }
-}
-
-/// The [Addition][std::ops::Add] implementation for 'Vector + Vector'.
-/// 
-/// # Example
-/// ```
-/// use simp_linalg::vector::Vector;
-/// 
-/// let vector1 = Vector::from(vec![1, 2, 3]);
-/// let vector2 = Vector::from(vec![4, 5, 6]);
-/// 
-/// let vector3 = &vector1 + &vector2;
-/// 
-/// assert_eq!(vector3, Vector::from(vec![5, 7, 9]))
-/// ```
-/// 
-/// # Panic!
-/// 
-/// This function will panic if the vectors are not the same size.
-impl<T> Add for &Vector<T>
-where
-    T: Add<Output = T> + Copy
-{
-    type Output = Vector<T>;
-
-    fn add(self, rhs: Self) -> Self::Output {
-        if self.len() != rhs.len() {
-            panic!("Vectors with different sizes cannot be added together.")
-        }
-
-        let mut params = vec![];
-        for idx in 0..self.len() {
-            params.push(self.list[idx] + rhs.list[idx])
-        }
-
-        Vector::from(params)
     }
 }

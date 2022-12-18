@@ -1,38 +1,89 @@
 # Simp_LinAlg
 
-A simply, light-weight linear algebra library for simple addition and multiplication of mathematical vectors and matrices.
+A generically defined, light-weight linear algebra library for simple addition and multiplication of vectors and matrices.
 
-Below is a working demonstration of initializing vectors and matrices, and some overloaded operations.
+Documentation:
+- [docs.rs](https://docs.rs/simp_linalg/)
+
+## Usage
+
+Add this to your ``Cargo.toml``
+```
+[dependencies]
+simp_linalg = "0.1.2"
+```
+
+## Operator Overloads
+
+Multiplication and addition of vectors and matrices require that their sizes relative to each other are *compatible*.
+
+### Multiplication
+
+- Vectors and Matrices can be multiplied by a scalar. __*Note: the scalar must be on the right side*__
+	* ``&Vector<T> * T -> Vector<T>``
+	* ``&Matrix<T> * T -> Matrix<T>``
+- Matrices can be multiplied by compatible matrices or vectors. 
+	* ``&Matrix<T> * &Vector<T> -> Vector<T>``
+	* ``&Matrix<T> * &Matrix<T> -> Matrix<T>``
+- Vectors can be multiplied by compatible vectors.
+	* ``&Vector<T> * &Vector<T> -> Vector<T>``
+
+### Addition
+
+- Vectors can be added with compatible vectors.
+	* ``&Vector<T> + &Vector<T> -> Vector<T>``
+- Matrices can be added with compatible matrices.
+	* ``&Matrix<T> + &Matrix<T> -> Matrix<T>``
+
+### Fighting the Borrow Checker
+
+#### Technically...
+
+The aforementioned operator overloaded features utilize borrows frequently. This is only necessary if you intend to continue the lifetime of the variable after its use in the calculation *(which is likely often)*.
+
+If this is not a requirement, then borrowing is unneeded and the calculation will work as expected.
+
+For example:
 ```
 use simp_linalg::prelude::*;
 
-// Initializing matrices
-let matrix1 = Matrix::from(vec![vec![1, 2],
-				vec![3, 4]]);
-                                
-let matrix2 = Matrix::from(vec![vec![5, 6],
-				vec![7, 8]]);
+//Create two vectors
+let vector1 = Vector::from(vec![1, 2, 3]);
 
-// Initializing vectors
-let vector1 = Vector::from(vec![9, 10]);
-let vector2 = Vector::from(vec![11, 12]);
+let vector2 = Vector::from(vec![4, 5, 6]);
 
-// Use of overloaded '*' operator
-let matrix_mul 	= &matrix1 * &matrix2;
-let vec_trans 	= &matrix1 * &vector2;
-let dot_prod   	= &vector1 * &vector2;
+// Note: vector2 is dropped after this calculation, but vector1 is not.
+let dot_prod: i32 = &vector1 * vector2;
+```
 
-assert_eq!(matrix_mul, Matrix::from(vec![vec![19, 22],
-					 vec![43, 50]]));
-assert_eq!(vec_trans, Vector::from(vec![35, 81]));
-assert_eq!(dot_prod, 219);
+#### Why is it dropped?
 
-// Use of overloaded '+' operator
-let matrix_add	= &matrix1 + &matrix2;
-let vector_add	= &vector1 + &vector2;
+This is due to Rust's **move** semantics. Rust's standard library type **Vec** does not implement the **Copy** trait, thereby moving the value into the multiplication/addition function when called, and consequently dropped when that function goes out of scope. By borrowing the value, the ownership is returned to the original scope and no value is dropped.
 
-assert_eq!(matrix_add, Matrix::from(vec![vec![6,  8],
-					 vec![10, 12]]));
+#### Why allow not borrowing?
 
-assert_eq!(vector_add, Vector::from(vec![20, 22]));
+This is because it allows for more readable source code.
+
+For instance, suppose you have a vector ``vector_1`` that is transformed by a matrix ``matrix``, whose result will be summed to another vector ``vector_2``.
+
+__In version 0.1.1 *(old)*__:
+```
+let result: i32 = &(&matrix * &vector_1) + &vector_2;
+```
+
+__In version 0.1.2__:
+```
+let result i32 = &matrix * &vector_1 + &vector_2;
+```
+
+Additionally, with the new feature of multiplying vectors and matrices by scalars, this saves the programmer from another unnecessary borrow. Using the example above, suppose now you want to scale ``vector_2`` before it is summed.
+
+__In version 0.1.1 *(old and hypothetically if scalar multiplication were included)*__:
+```
+let result: Vector<i32> = &(&matrix * &vector_1) + &(&vector_2 * 4);
+```
+
+__In version 0.1.2__:
+```
+let result: Vector<i32> = &matrix * &vector_1 + &vector_2 * 4;
 ```
