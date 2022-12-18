@@ -15,6 +15,8 @@ simp_linalg = "0.1.2"
 
 ## Operator Overloads
 
+Multiplication and addition of vectors and matrices require that their sizes relative to each other are *compatible*.
+
 ### Multiplication
 
 - Vectors and Matrices can be multiplied by a scalar. __*Note: the scalar must be on the right side*__
@@ -56,7 +58,7 @@ let dot_prod: i32 = &vector1 * vector2;
 
 #### Why is it dropped?
 
-This is due to Rust's **move** semantics. Rust's standard library type **Vec** does not implement the **Copy** trait, thereby moving the value into the multiplication/addition function when called, and dropped when that function goes out of scope. By borrowing the value, the ownership is returned to the original scope and no value is dropped.
+This is due to Rust's **move** semantics. Rust's standard library type **Vec** does not implement the **Copy** trait, thereby moving the value into the multiplication/addition function when called, and consequently dropped when that function goes out of scope. By borrowing the value, the ownership is returned to the original scope and no value is dropped.
 
 #### Why allow not borrowing?
 
@@ -74,7 +76,7 @@ __In version 0.1.2__:
 let result i32 = &matrix * &vector_1 + &vector_2;
 ```
 
-Additionally, with the new feature of multiplying vector and matrices by scalars, it save the programmer from another unnecessary borrow. Using the example above, suppose now you want to scale ``vector_2`` before it is summed.
+Additionally, with the new feature of multiplying vectors and matrices by scalars, this saves the programmer from another unnecessary borrow. Using the example above, suppose now you want to scale ``vector_2`` before it is summed.
 
 __In version 0.1.1 *(old and hypothetically if scalar multiplication were included)*__:
 ```
