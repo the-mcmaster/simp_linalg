@@ -42,7 +42,7 @@ impl<T> Vector<T>
     ///                                          vec![vec!["what"]]]));
     /// ```
     pub fn into_col_matrix(self) -> Matrix<T> {
-        let mut matrix = vec![];
+        let mut matrix = Vec::with_capacity(self.len());
         for param in self.list {
             matrix.push(vec![param])
         }
@@ -94,10 +94,40 @@ impl<T> Vector<T>
     where
         F: Fn(&T) -> T
     {
-        let mut params = vec![];
+        let mut params = Vec::with_capacity(self.len());
         
         for item in self.list() {
             params.push(funct(item))
+        }
+
+        Vector::from(params)
+    }
+
+    /// ```
+    /// use simp_linalg::vector::Vector;
+    /// 
+    /// let vector_x = Vector::from(vec![1, 2, 3]);
+    /// let vector_y = Vector::from(vec![4, 5, 6]);
+    /// 
+    /// let vector_z = vector_x.map(&vector_y, |val1, val2| val1 * val2);
+    /// 
+    /// assert_eq!(vector_z, Vector::from(vec![4, 10, 18]))
+    /// ```
+    pub fn map<F>(&self, other: &Vector<T>, funct: F) -> Vector<T>
+    where
+        F: Fn(&T, &T) -> T
+    {
+        if self.len() != other.len() {
+            panic!("Cannot map vectors of different lengths.")
+        }
+
+        let mut params = Vec::with_capacity(self.len());
+
+        let mut lhs_iter = self.list().iter();
+        let mut rhs_iter = other.list().iter();
+
+        while let (Some(lhs_item), Some(rhs_item)) = (lhs_iter.next(), rhs_iter.next()) {
+            params.push(funct(lhs_item, rhs_item))
         }
 
         Vector::from(params)
@@ -112,7 +142,7 @@ impl<T> Vector<T>
     pub fn list(&self) -> &Vec<T> {
         &self.list
     }
-}
+} 
 
 /// Converts a [Vec][std::vec::Vec] to a Vector.
 /// 
