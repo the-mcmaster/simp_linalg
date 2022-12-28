@@ -43,9 +43,11 @@ impl<T> Vector<T>
     /// ```
     pub fn into_col_matrix(self) -> Matrix<T> {
         let mut matrix = Vec::with_capacity(self.len());
+
         for param in self.list {
             matrix.push(vec![param])
         }
+
         Matrix::from(matrix)
     }
 
@@ -117,17 +119,17 @@ impl<T> Vector<T>
     where
         F: Fn(&T, &T) -> T
     {
-        if self.len() != other.len() {
+        if self.len() != other.len() { 
             panic!("Cannot map vectors of different lengths.")
         }
 
         let mut params = Vec::with_capacity(self.len());
 
-        let mut lhs_iter = self.list().iter();
-        let mut rhs_iter = other.list().iter();
-
-        while let (Some(lhs_item), Some(rhs_item)) = (lhs_iter.next(), rhs_iter.next()) {
-            params.push(funct(lhs_item, rhs_item))
+        let lhs = self.list();
+        let rhs = other.list();
+        
+        for idx in 0..self.len() {
+            params.push(funct(&lhs[idx], &rhs[idx]))
         }
 
         Vector::from(params)
@@ -142,7 +144,7 @@ impl<T> Vector<T>
     pub fn list(&self) -> &Vec<T> {
         &self.list
     }
-} 
+}
 
 /// Converts a [Vec][std::vec::Vec] to a Vector.
 /// 
