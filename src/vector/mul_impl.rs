@@ -209,7 +209,7 @@ where
     type Output = Vector<T>;
 
     fn mul(self, rhs: T) -> Self::Output {
-        let mut params = vec![];
+        let mut params = Vec::with_capacity(self.len());
         for item in self.list() {
             params.push(rhs * *item)
         }
@@ -243,7 +243,7 @@ where
     type Output = Vector<T>;
 
     fn mul(self, rhs: T) -> Self::Output {
-        let mut params = vec![];
+        let mut params = Vec::with_capacity(self.len());
         for item in self.list() {
             params.push(rhs * *item)
         }

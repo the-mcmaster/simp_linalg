@@ -33,9 +33,11 @@ where
         if self.len() != rhs.len() {
             panic!("Vectors with different sizes cannot be added together.")
         }
+        
+        let length = self.len();
 
-        let mut params = vec![];
-        for idx in 0..self.len() {
+        let mut params = Vec::with_capacity(length);
+        for idx in 0..length {
             params.push(self.list[idx] + rhs.list[idx])
         }
 
@@ -90,9 +92,11 @@ where
         if self.len() != rhs.len() {
             panic!("Vectors with different sizes cannot be added together.")
         }
+        
+        let length = self.len();
 
-        let mut params = vec![];
-        for idx in 0..self.len() {
+        let mut params = Vec::with_capacity(length);
+        for idx in 0..length {
             params.push(self.list[idx] + rhs.list[idx])
         }
 
@@ -147,9 +151,11 @@ where
         if self.len() != rhs.len() {
             panic!("Vectors with different sizes cannot be added together.")
         }
+        
+        let length = self.len();
 
-        let mut params = vec![];
-        for idx in 0..self.len() {
+        let mut params = Vec::with_capacity(length);
+        for idx in 0..length {
             params.push(self.list[idx] + rhs.list[idx])
         }
 
@@ -204,9 +210,11 @@ where
         if self.len() != rhs.len() {
             panic!("Vectors with different sizes cannot be added together.")
         }
+        
+        let length = self.len();
 
-        let mut params = vec![];
-        for idx in 0..self.len() {
+        let mut params = Vec::with_capacity(length);
+        for idx in 0..length {
             params.push(self.list[idx] + rhs.list[idx])
         }
 

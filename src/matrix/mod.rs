@@ -1,5 +1,6 @@
 mod mul_impl;
 mod add_impl;
+
 use crate::vector::Vector;
 
 #[allow(dead_code)]
@@ -51,24 +52,109 @@ where
     /// ```
     pub fn into_vector(self) -> Vector<T> {
         if self.rows == 1 {
-            let mut params = vec![];
-            for param in &self.matrix[0] {
-                params.push(*param)
+            let mut params = Vec::with_capacity(self.cols);
+
+            for col in &self.matrix[0] {
+                params.push(*col)
             }
+
             return Vector::from(params)
         }
         
         else if self.cols == 1 {
-            let mut params: Vec<T> = vec![];
+            let mut params: Vec<T> = Vec::with_capacity(self.rows);
+
             for row in self.matrix {
                 params.push(row[0])
             }
+
             return Vector::from(params);
         }
         
         else {
             panic!("Cannot convert matrix because neither rows nor columns are 1")
         }
+    }
+}
+
+impl<T> Matrix<T> {
+    /// Applies a function to each individual element
+    /// in the matrix.
+    /// 
+    /// # Example
+    /// ```
+    /// use simp_linalg::matrix::Matrix;
+    /// 
+    /// let matrix1 = Matrix::from(vec![vec![1, 2],
+    ///                                 vec![3, 4]]);
+    /// 
+    /// let matrix2 = matrix1.lambda(|val| val * val);
+    /// 
+    /// assert_eq!(matrix2, Matrix::from(vec![vec![1, 4],
+    ///                                       vec![9, 16]]));
+    /// ```
+    pub fn lambda<F>(&self, funct: F) -> Matrix<T>
+    where
+        F: Fn(&T) -> T
+    {
+        let mut rows = Vec::with_capacity(self.rows);
+        
+        
+        for row in &self.matrix {
+            let mut cols = Vec::with_capacity(self.cols);
+            
+            for col in row {
+                cols.push(funct(col))
+            }
+            
+            rows.push(cols)
+        }
+
+        Matrix::from(rows)
+    }
+
+    /// Applies a function to each corresponding 
+    /// elements between the two matrices. 
+    /// 
+    /// # Example
+    /// ```
+    /// use simp_linalg::matrix::Matrix;
+    /// 
+    /// let matrix1 = Matrix::from(vec![vec![1, 2],
+    ///                                 vec![3, 4]]);
+    /// let matrix2 = Matrix::from(vec![vec![5, 6],
+    ///                                 vec![7, 8]]);
+    /// 
+    /// let matrix3 = matrix1.map(&matrix2, |val1, val2| val1 * val2);
+    /// 
+    /// assert_eq!(matrix3, Matrix::from(vec![vec![5,  12],
+    ///                                       vec![21, 32]]));
+    /// ```
+    /// 
+    /// # Panic!
+    /// This function will panic if the two matrices are not identically
+    /// sized.
+    pub fn map<F>(&self, other: &Matrix<T>, funct: F) -> Matrix<T>
+    where
+        F: Fn(&T, &T) -> T
+    {
+        if (self.rows != other.rows) || (self.cols != other.cols) { 
+            panic!("Cannot map matrices of different sizes.")
+        }
+
+        let mut rows = Vec::with_capacity(self.rows);
+
+        for row_idx in 0..self.rows {
+            let mut cols = Vec::with_capacity(self.cols);
+
+            for col_idx in 0..self.cols {
+                cols.push(funct(&self.matrix[row_idx][col_idx], &other.matrix[row_idx][col_idx]))
+            }
+
+            rows.push(cols)
+        }
+
+        Matrix::from(rows)
     }
 
     /// Returns the number of rows of the Matrix<T>.
@@ -98,13 +184,16 @@ where
 /// ```
 impl<T> From<Vec<Vec<T>>> for Matrix<T> {
     fn from(params: Vec<Vec<T>>) -> Self {
+
         let rows = params.len();
         let cols = params[0].len();
+
         for row in 1..rows {
             if params[row].len() != cols {
                 panic!("Input 2D Vec does not have same length for all rows")
             }
         }
+
         Matrix {
             rows : params.len(),
             cols : params[0].len(),

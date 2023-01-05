@@ -41,7 +41,7 @@ where
             panic!("Differently sized matrices cannot be added together.")
         }
 
-        let mut params = vec![vec![]; self.rows];
+        let mut params: Vec<Vec<T>> = vec![Vec::with_capacity(self.cols); self.rows];
         for row_idx in 0..self.rows {
             for col_idx in 0..self.cols {
                 params[row_idx].push(self.matrix[row_idx][col_idx] + rhs.matrix[row_idx][col_idx])
@@ -113,7 +113,7 @@ where
             panic!("Differently sized matrices cannot be added together.")
         }
 
-        let mut params = vec![vec![]; self.rows];
+        let mut params: Vec<Vec<T>> = vec![Vec::with_capacity(self.cols); self.rows];
         for row_idx in 0..self.rows {
             for col_idx in 0..self.cols {
                 params[row_idx].push(self.matrix[row_idx][col_idx] + rhs.matrix[row_idx][col_idx])
@@ -185,7 +185,7 @@ where
             panic!("Differently sized matrices cannot be added together.")
         }
 
-        let mut params = vec![vec![]; self.rows];
+        let mut params: Vec<Vec<T>> = vec![Vec::with_capacity(self.cols); self.rows];
         for row_idx in 0..self.rows {
             for col_idx in 0..self.cols {
                 params[row_idx].push(self.matrix[row_idx][col_idx] + rhs.matrix[row_idx][col_idx])
@@ -257,7 +257,7 @@ where
             panic!("Differently sized matrices cannot be added together.")
         }
 
-        let mut params = vec![vec![]; self.rows];
+        let mut params: Vec<Vec<T>> = vec![Vec::with_capacity(self.cols); self.rows];
         for row_idx in 0..self.rows {
             for col_idx in 0..self.cols {
                 params[row_idx].push(self.matrix[row_idx][col_idx] + rhs.matrix[row_idx][col_idx])
