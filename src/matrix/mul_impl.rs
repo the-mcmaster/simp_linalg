@@ -50,7 +50,7 @@ where
             panic!("The left matrix row count is not equal to the right matrix column count.")
         }
 
-        let mut params: Vec<Vec<T>> = vec![vec![]; self.rows];
+        let mut params: Vec<Vec<T>> = vec![Vec::with_capacity(self.cols); self.rows];
 
         for out_row_index in 0..self.rows {
             for out_col_index in 0..rhs.cols {
@@ -61,6 +61,10 @@ where
                     //get the data from the lhs's row
                     let lhs_row_ptr = self.matrix[out_row_index].as_ptr();
                     let lhs_value: T;
+
+                    // SAFTEY: self.cols is guarenteed to be one-greater-than
+                    //         the last index for the lhs_row_ptr and therefore
+                    //         will never go out of range.
                     unsafe {
                         lhs_value = *lhs_row_ptr.add(index)
                     }
@@ -68,6 +72,10 @@ where
                     //get the data from the rhs's col
                     let rhs_row_ptr = rhs.matrix[index].as_ptr();
                     let rhs_value: T;
+
+                    // SAFETY: rhs.rows is guarenteed to be one-greater-than
+                    //         the last index in the rhs_row_ptr and therefore
+                    //         will never go out of range.
                     unsafe {
                         rhs_value = *rhs_row_ptr.add(out_col_index)
                     }
@@ -143,7 +151,7 @@ where
             panic!("The left matrix row count is not equal to the right matrix column count.")
         }
 
-        let mut params: Vec<Vec<T>> = vec![vec![]; self.rows];
+        let mut params: Vec<Vec<T>> = vec![Vec::with_capacity(self.cols); self.rows];
 
         for out_row_index in 0..self.rows {
             for out_col_index in 0..rhs.cols {
@@ -154,6 +162,10 @@ where
                     //get the data from the lhs's row
                     let lhs_row_ptr = self.matrix[out_row_index].as_ptr();
                     let lhs_value: T;
+
+                    // SAFTEY: self.cols is guarenteed to be one-greater-than
+                    //         the last index for the lhs_row_ptr and therefore
+                    //         will never go out of range.
                     unsafe {
                         lhs_value = *lhs_row_ptr.add(index)
                     }
@@ -161,6 +173,10 @@ where
                     //get the data from the rhs's col
                     let rhs_row_ptr = rhs.matrix[index].as_ptr();
                     let rhs_value: T;
+
+                    // SAFETY: rhs.rows is guarenteed to be one-greater-than
+                    //         the last index in the rhs_row_ptr and therefore
+                    //         will never go out of range.
                     unsafe {
                         rhs_value = *rhs_row_ptr.add(out_col_index)
                     }
@@ -236,7 +252,7 @@ where
             panic!("The left matrix row count is not equal to the right matrix column count.")
         }
 
-        let mut params: Vec<Vec<T>> = vec![vec![]; self.rows];
+        let mut params: Vec<Vec<T>> = vec![Vec::with_capacity(self.cols); self.rows];
 
         for out_row_index in 0..self.rows {
             for out_col_index in 0..rhs.cols {
@@ -247,6 +263,10 @@ where
                     //get the data from the lhs's row
                     let lhs_row_ptr = self.matrix[out_row_index].as_ptr();
                     let lhs_value: T;
+
+                    // SAFTEY: self.cols is guarenteed to be one-greater-than
+                    //         the last index for the lhs_row_ptr and therefore
+                    //         will never go out of range.
                     unsafe {
                         lhs_value = *lhs_row_ptr.add(index)
                     }
@@ -254,6 +274,10 @@ where
                     //get the data from the rhs's col
                     let rhs_row_ptr = rhs.matrix[index].as_ptr();
                     let rhs_value: T;
+
+                    // SAFETY: rhs.rows is guarenteed to be one-greater-than
+                    //         the last index in the rhs_row_ptr and therefore
+                    //         will never go out of range.
                     unsafe {
                         rhs_value = *rhs_row_ptr.add(out_col_index)
                     }
@@ -329,7 +353,7 @@ where
             panic!("The left matrix row count is not equal to the right matrix column count.")
         }
 
-        let mut params: Vec<Vec<T>> = vec![vec![]; self.rows];
+        let mut params: Vec<Vec<T>> = vec![Vec::with_capacity(self.cols); self.rows];
 
         for out_row_index in 0..self.rows {
             for out_col_index in 0..rhs.cols {
@@ -340,6 +364,10 @@ where
                     //get the data from the lhs's row
                     let lhs_row_ptr = self.matrix[out_row_index].as_ptr();
                     let lhs_value: T;
+
+                    // SAFTEY: self.cols is guarenteed to be one-greater-than
+                    //         the last index for the lhs_row_ptr and therefore
+                    //         will never go out of range.
                     unsafe {
                         lhs_value = *lhs_row_ptr.add(index)
                     }
@@ -347,6 +375,10 @@ where
                     //get the data from the rhs's col
                     let rhs_row_ptr = rhs.matrix[index].as_ptr();
                     let rhs_value: T;
+
+                    // SAFETY: rhs.rows is guarenteed to be one-greater-than
+                    //         the last index in the rhs_row_ptr and therefore
+                    //         will never go out of range.
                     unsafe {
                         rhs_value = *rhs_row_ptr.add(out_col_index)
                     }
@@ -406,7 +438,7 @@ where
         if rhs.len() != self.cols {
             panic!("The matrix column count must be equal to the vector parameter count.")
         };
-        let mut params = vec![];
+        let mut params = Vec::with_capacity(self.rows);
         let vector_ptr = rhs.list().as_ptr();
 
         // SAFTEY: The previous test guarentees that valid memory will be pointed to.
@@ -416,6 +448,8 @@ where
             let row_ptr = row.as_ptr();
             
             for i in 0..self.cols {
+                // SAFETY: rhs.len() == self.cols and therefore
+                //         it will always be in range
                 unsafe {
                     param += *row_ptr.add(i) * *vector_ptr.add(i)
                 }
@@ -467,7 +501,7 @@ where
         if rhs.len() != self.cols {
             panic!("The matrix column count must be equal to the vector parameter count.")
         };
-        let mut params = vec![];
+        let mut params = Vec::with_capacity(self.rows);
         let vector_ptr = rhs.list().as_ptr();
 
         // SAFTEY: The previous test guarentees that valid memory will be pointed to.
@@ -477,6 +511,8 @@ where
             let row_ptr = row.as_ptr();
             
             for i in 0..self.cols {
+                // SAFETY: rhs.len() == self.cols and therefore
+                //         it will always be in range
                 unsafe {
                     param += *row_ptr.add(i) * *vector_ptr.add(i)
                 }
@@ -528,7 +564,7 @@ where
         if rhs.len() != self.cols {
             panic!("The matrix column count must be equal to the vector parameter count.")
         };
-        let mut params = vec![];
+        let mut params = Vec::with_capacity(self.rows);
         let vector_ptr = rhs.list().as_ptr();
 
         // SAFTEY: The previous test guarentees that valid memory will be pointed to.
@@ -538,6 +574,8 @@ where
             let row_ptr = row.as_ptr();
             
             for i in 0..self.cols {
+                // SAFETY: rhs.len() == self.cols and therefore
+                //         it will always be in range
                 unsafe {
                     param += *row_ptr.add(i) * *vector_ptr.add(i)
                 }
@@ -589,7 +627,7 @@ where
         if rhs.len() != self.cols {
             panic!("The matrix column count must be equal to the vector parameter count.")
         };
-        let mut params = vec![];
+        let mut params = Vec::with_capacity(self.rows);
         let vector_ptr = rhs.list().as_ptr();
 
         // SAFTEY: The previous test guarentees that valid memory will be pointed to.
@@ -599,6 +637,8 @@ where
             let row_ptr = row.as_ptr();
             
             for i in 0..self.cols {
+                // SAFETY: rhs.len() == self.cols and therefore
+                //         it will always be in range
                 unsafe {
                     param += *row_ptr.add(i) * *vector_ptr.add(i)
                 }
@@ -645,10 +685,10 @@ where
     type Output = Matrix<T>;
 
     fn mul(self, rhs: T) -> Self::Output {
-        let mut params = vec![];
+        let mut params = Vec::with_capacity(self.rows);
 
         for row_idx in 0..self.rows {
-            let mut params_row = vec![];
+            let mut params_row = Vec::with_capacity(self.cols);
             
             for col_idx in 0..self.cols {
                 params_row.push(rhs * self.matrix[row_idx][col_idx])
@@ -688,10 +728,10 @@ where
     type Output = Matrix<T>;
 
     fn mul(self, rhs: T) -> Self::Output {
-        let mut params = vec![];
+        let mut params = Vec::with_capacity(self.rows);
 
         for row_idx in 0..self.rows {
-            let mut params_row = vec![];
+            let mut params_row = Vec::with_capacity(self.cols);
             
             for col_idx in 0..self.cols {
                 params_row.push(rhs * self.matrix[row_idx][col_idx])
@@ -699,7 +739,7 @@ where
             
             params.push(params_row)
         }
-
+        
         Matrix::from(params)
     }
 }
