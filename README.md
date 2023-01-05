@@ -26,7 +26,7 @@ Multiplication and addition of vectors and matrices require that their sizes rel
 	* ``&Matrix<T> * &Vector<T> -> Vector<T>``
 	* ``&Matrix<T> * &Matrix<T> -> Matrix<T>``
 - Vectors can be multiplied by compatible vectors.
-	* ``&Vector<T> * &Vector<T> -> Vector<T>``
+	* ``&Vector<T> * &Vector<T> -> T``
 
 ### Addition
 
@@ -68,12 +68,12 @@ For instance, suppose you have a vector ``vector_1`` that is transformed by a ma
 
 __In version 0.1.1 *(old)*__:
 ```
-let result: i32 = &(&matrix * &vector_1) + &vector_2;
+let result: Vector<i32> = &(&matrix * &vector_1) + &vector_2;
 ```
 
 __In version 0.1.2__:
 ```
-let result i32 = &matrix * &vector_1 + &vector_2;
+let result: Vector<i32> = &matrix * &vector_1 + &vector_2;
 ```
 
 Additionally, with the new feature of multiplying vectors and matrices by scalars, this saves the programmer from another unnecessary borrow. Using the example above, suppose now you want to scale ``vector_2`` before it is summed.
