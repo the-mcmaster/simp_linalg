@@ -78,6 +78,9 @@ where
 }
 
 impl<T> Matrix<T> {
+    /// Applies a function to each individual element
+    /// in the matrix.
+    /// 
     /// # Example
     /// ```
     /// use simp_linalg::matrix::Matrix;
@@ -110,6 +113,9 @@ impl<T> Matrix<T> {
         Matrix::from(rows)
     }
 
+    /// Applies a function to each corresponding 
+    /// elements between the two matrices. 
+    /// 
     /// # Example
     /// ```
     /// use simp_linalg::matrix::Matrix;
@@ -124,6 +130,10 @@ impl<T> Matrix<T> {
     /// assert_eq!(matrix3, Matrix::from(vec![vec![5,  12],
     ///                                       vec![21, 32]]));
     /// ```
+    /// 
+    /// # Panic!
+    /// This function will panic if the two matrices are not identically
+    /// sized.
     pub fn map<F>(&self, other: &Matrix<T>, funct: F) -> Matrix<T>
     where
         F: Fn(&T, &T) -> T

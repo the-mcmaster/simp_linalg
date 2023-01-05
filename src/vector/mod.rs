@@ -105,6 +105,10 @@ impl<T> Vector<T>
         Vector::from(params)
     }
 
+    /// Applies a function to each corresponding 
+    /// elements between the two vectors. 
+    /// 
+    /// # Example
     /// ```
     /// use simp_linalg::vector::Vector;
     /// 
@@ -115,6 +119,10 @@ impl<T> Vector<T>
     /// 
     /// assert_eq!(vector_z, Vector::from(vec![4, 10, 18]))
     /// ```
+    /// 
+    /// # Panic!
+    /// This function will panic if the two vectors are not identically
+    /// sized.
     pub fn map<F>(&self, other: &Vector<T>, funct: F) -> Vector<T>
     where
         F: Fn(&T, &T) -> T
