@@ -38,4 +38,24 @@ impl<T> Vector<T> {
 
         Vector::from(params)
     }
+    
+    pub fn map_enumerate<F>(&self, other: &Vector<T>, funct: F) -> Vector<T>
+    where
+        F: Fn(usize, &T, &T) -> T
+    {
+        if self.len() != other.len() { 
+            panic!("Cannot map vectors of different lengths.")
+        }
+
+        let mut params = Vec::with_capacity(self.len());
+
+        let lhs = self.list();
+        let rhs = other.list();
+        
+        for idx in 0..self.len() {
+            params.push(funct(idx, &lhs[idx], &rhs[idx]))
+        }
+
+        Vector::from(params)
+    }
 }

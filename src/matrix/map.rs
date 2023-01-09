@@ -30,18 +30,41 @@ impl<T> Matrix<T> {
             panic!("Cannot map matrices of different sizes.")
         }
 
-        let mut rows = Vec::with_capacity(self.rows);
+        let mut params = Vec::with_capacity(self.rows);
 
         for row_idx in 0..self.rows {
-            let mut cols = Vec::with_capacity(self.cols);
+            let mut new_row = Vec::with_capacity(self.cols);
 
             for col_idx in 0..self.cols {
-                cols.push(funct(&self.matrix[row_idx][col_idx], &other.matrix[row_idx][col_idx]))
+                new_row.push(funct(&self.matrix[row_idx][col_idx], &other.matrix[row_idx][col_idx]))
             }
 
-            rows.push(cols)
+            params.push(new_row)
         }
 
-        Matrix::from(rows)
+        Matrix::from(params)
+    }
+
+    pub fn map_enumerate<F>(&self, other: &Matrix<T>, funct: F) -> Matrix<T>
+    where
+        F: Fn(usize, usize, &T, &T) -> T
+    {
+        if (self.rows != other.rows) || (self.cols != other.cols) { 
+            panic!("Cannot map matrices of different sizes.")
+        }
+
+        let mut params = Vec::with_capacity(self.rows);
+
+        for row_idx in 0..self.rows {
+            let mut new_row = Vec::with_capacity(self.cols);
+
+            for col_idx in 0..self.cols {
+                new_row.push(funct(row_idx, col_idx, &self.matrix[row_idx][col_idx], &other.matrix[row_idx][col_idx]))
+            }
+
+            params.push(new_row)
+        }
+
+        Matrix::from(params)
     }
 }
