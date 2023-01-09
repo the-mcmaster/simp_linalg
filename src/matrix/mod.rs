@@ -97,20 +97,20 @@ impl<T> Matrix<T> {
     where
         F: Fn(&T) -> T
     {
-        let mut rows = Vec::with_capacity(self.rows);
+        let mut params = Vec::with_capacity(self.rows);
         
         
         for row in &self.matrix {
-            let mut cols = Vec::with_capacity(self.cols);
+            let mut new_row = Vec::with_capacity(self.cols);
             
             for col in row {
-                cols.push(funct(col))
+                new_row.push(funct(col))
             }
             
-            rows.push(cols)
+            params.push(new_row)
         }
 
-        Matrix::from(rows)
+        Matrix::from(params)
     }
 
     /// Applies a function to each corresponding 
@@ -155,6 +155,45 @@ impl<T> Matrix<T> {
         }
 
         Matrix::from(rows)
+    }
+
+    pub fn lambda_index<F>(&self, funct : F) -> Matrix<T>
+    where
+        F: Fn(usize, usize) -> T
+    {
+        let mut params = Vec::with_capacity(self.rows);
+        
+        
+        for row_idx in 0..self.rows {
+            let mut new_row = Vec::with_capacity(self.cols);
+            
+            for col_idx in 0..self.cols {
+                new_row.push(funct(row_idx, col_idx))
+            }
+
+            params.push(new_row)
+        }
+
+        Matrix::from(params)
+    }
+
+    pub fn lambda_enumerate<F>(&self, funct : F) -> Matrix<T>
+    where
+        F: Fn(usize, usize, &T) -> T
+    {
+        let mut params = Vec::with_capacity(self.rows);
+
+        for (row_idx, row) in self.matrix.iter().enumerate() {
+            let mut new_row = Vec::with_capacity(self.cols);
+
+            for (col_idx, col) in row.iter().enumerate() {
+                new_row.push(funct(row_idx, col_idx, col))
+            }
+            
+            params.push(new_row)
+        }
+
+        Matrix::from(params)
     }
 
     /// Returns the number of rows of the Matrix<T>.
