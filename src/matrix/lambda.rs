@@ -1,8 +1,8 @@
 use crate::matrix::Matrix;
 
 impl<T> Matrix<T> {
-    /// Applies a function to each individual element
-    /// in the matrix.
+    /// Applies a function dependent on value
+    /// to each individual element in the matrix.
     /// 
     /// # Example
     /// ```
@@ -36,6 +36,21 @@ impl<T> Matrix<T> {
         Matrix::from(params)
     }
 
+    /// Applies a function dependent on location
+    /// to each individual element in the matrix.
+    /// 
+    /// # Example
+    /// ```
+    /// use simp_linalg::matrix::Matrix;
+    /// 
+    /// let matrix1 = Matrix::from(vec![vec![1, 2],
+    ///                                 vec![3, 4]]);
+    /// 
+    /// let matrix2 = matrix1.lambda_index(|row, col| row * col + row + col);
+    /// 
+    /// assert_eq!(matrix2, Matrix::from(vec![vec![0, 1],
+    ///                                       vec![1, 3]]));
+    /// ```
     pub fn lambda_index<F>(&self, funct : F) -> Matrix<T>
     where
         F: Fn(usize, usize) -> T
@@ -56,6 +71,21 @@ impl<T> Matrix<T> {
         Matrix::from(params)
     }
 
+    /// Applies a function dependent on location and value
+    /// to each individual element in the matrix.
+    /// 
+    /// # Example
+    /// ```
+    /// use simp_linalg::matrix::Matrix;
+    /// 
+    /// let matrix1 = Matrix::from(vec![vec![1, 2],
+    ///                                 vec![3, 4]]);
+    /// 
+    /// let matrix2 = matrix1.lambda_enumerate(|row, col, val| row + col + val);
+    /// 
+    /// assert_eq!(matrix2, Matrix::from(vec![vec![1, 3],
+    ///                                       vec![4, 6]]));
+    /// ```
     pub fn lambda_enumerate<F>(&self, funct : F) -> Matrix<T>
     where
         F: Fn(usize, usize, &T) -> T

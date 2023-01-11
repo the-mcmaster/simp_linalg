@@ -1,8 +1,8 @@
 use crate::vector::Vector;
 
 impl<T> Vector<T> {
-    /// Applies a function to each corresponding 
-    /// elements between the two vectors. 
+    /// Applies a function dependent on value
+    /// to each corresponding element between the two vectors. 
     /// 
     /// # Example
     /// ```
@@ -39,6 +39,45 @@ impl<T> Vector<T> {
         Vector::from(params)
     }
     
+    /*
+        For anyone following the source code, lambda.rs
+        has a function called 'lambda_index' while map.rs
+        does not. This is on purpose, as it is pointless.
+
+        Consider what the generic function definition
+        would be for a map_index.
+        
+        This is what it would be:
+            F: Fn(usize) -> T
+        
+        This is already used for lambda_index.
+
+        Additionally, the vectors are independent from
+        the function definition, and no actual mapping
+        will be done.
+        
+        Therefore, it is pointless to add the method 'map_index',
+        as it does not make sense.
+    */
+    
+    /// Applies a function dependent on value and location 
+    /// to each corresponding element between the two vectors. 
+    /// 
+    /// # Example
+    /// ```
+    /// use simp_linalg::vector::Vector;
+    /// 
+    /// let vector_x = Vector::from(vec![1, 2, 3]);
+    /// let vector_y = Vector::from(vec![4, 5, 6]);
+    /// 
+    /// let vector_z = vector_x.map_enumerate(&vector_y, |idx, val1, val2| val1 * val2 + idx);
+    /// 
+    /// assert_eq!(vector_z, Vector::from(vec![4, 11, 20]))
+    /// ```
+    /// 
+    /// # Panic!
+    /// This function will panic if the two vectors are not identically
+    /// sized.
     pub fn map_enumerate<F>(&self, other: &Vector<T>, funct: F) -> Vector<T>
     where
         F: Fn(usize, &T, &T) -> T

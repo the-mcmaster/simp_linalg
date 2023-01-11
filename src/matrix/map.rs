@@ -1,8 +1,9 @@
 use crate::matrix::Matrix;
 
 impl<T> Matrix<T> {
-    /// Applies a function to each corresponding 
-    /// elements between the two matrices. 
+    /// Applies a function dependent on value 
+    /// to each corresponding element between
+    /// the two matrices. 
     /// 
     /// # Example
     /// ```
@@ -45,6 +46,48 @@ impl<T> Matrix<T> {
         Matrix::from(params)
     }
 
+    /*
+        For anyone following the source code, lambda.rs
+        has a function called 'lambda_index' while map.rs
+        does not. This is on purpose, as it is pointless.
+
+        Consider what the generic function definition
+        would be for a map_index.
+        
+        This is what it would be:
+            F: Fn(usize, usize) -> T
+        
+        This is already used for lambda_index.
+
+        Additionally, the matrices are independent from
+        the function definition, and no actual mapping
+        will be done.
+        
+        Therefore, it is pointless to add the method 'map_index',
+        as it does not make sense.
+    */
+
+    /// Applies a function dependent on location and value 
+    /// to each corresponding element between the two matrices. 
+    /// 
+    /// # Example
+    /// ```
+    /// use simp_linalg::matrix::Matrix;
+    /// 
+    /// let matrix1 = Matrix::from(vec![vec![1, 2],
+    ///                                 vec![3, 4]]);
+    /// let matrix2 = Matrix::from(vec![vec![5, 6],
+    ///                                 vec![7, 8]]);
+    /// 
+    /// let matrix3 = matrix1.map_enumerate(&matrix2, |row, col, val1, val2| val1 * val2 + (row * col + 1));
+    /// 
+    /// assert_eq!(matrix3, Matrix::from(vec![vec![6,  13],
+    ///                                       vec![22, 34]]));
+    /// ```
+    /// 
+    /// # Panic!
+    /// This function will panic if the two matrices are not identically
+    /// sized.
     pub fn map_enumerate<F>(&self, other: &Matrix<T>, funct: F) -> Matrix<T>
     where
         F: Fn(usize, usize, &T, &T) -> T
