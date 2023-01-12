@@ -89,6 +89,11 @@ impl<T> Matrix<T> {
     pub fn cols(&self) -> usize {
         self.cols
     }
+
+    /// Unwraps the matrix.
+    pub fn into_inner(self) -> Vec<Vec<T>> {
+        self.matrix
+    }
 }
 
 /// # Panic!

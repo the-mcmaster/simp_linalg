@@ -89,6 +89,11 @@ impl<T> Vector<T>
     pub fn list(&self) -> &Vec<T> {
         &self.list
     }
+
+    /// Unwraps the vector.
+    pub fn into_inner(self) -> Vec<T> {
+        self.list
+    }
 }
 
 /// Converts a [Vec][std::vec::Vec] to a Vector.
