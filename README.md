@@ -10,7 +10,7 @@ Documentation:
 Add this to your ``Cargo.toml``
 ```
 [dependencies]
-simp_linalg = "0.1.3"
+simp_linalg = "0.1.4"
 ```
 
 ## Operator Overloads
@@ -94,10 +94,26 @@ let result: Vector<i32> = &matrix * &vector_1 + &vector_2 * 4;
 ## Functionality
 Two main functions, **lambda** and **map**, can be used to manipulate the individual values within itself or mesh together two vectors or matrices, in a user-defined way.
 
-### Lambda
+### Lambda Functions
 
-Applies a user-defined function to each element of the vector or matrix.
+Overall, these methods applies a user-defined function to each element of the vector or matrix.
 
+The parameters for the custom function depends on the method called, which there are three:
+- **lambda**
+	- *Vector/Matrix*: Fn(&T) -> T
+		- Uses the corresponding element
+- **lambda_index**
+	- *Vector*: Fn(usize) -> T
+		- Uses the index
+	- *Matrix*: Fn(usize, usize) -> T
+		- Uses the row index and column index
+- **lambda_enumerate**
+	- *Vector*: Fn(usize, &T) -> T
+		- Uses the index and the corresponding element
+	- *Matrix*: Fn(usize, usize, &T) -> T
+		- Uses the row index, column index, and the corresponding element
+
+#### Example
 ```
 use simp_linalg::prelude::*;
 
@@ -117,10 +133,21 @@ assert_eq!(new_matrix, Matrix::from(vec![vec![1,4],
                                          vec![9,16]]))
 ```
 
-### Map
+### Map Functions
 
-Combines two vector or matrices together using a user-defined function.
+Overall, these methods combine two vectors or matrices together using a user-defined function.
 
+The parameters for the custom function mapping depends on the mapping method called, which there are two:
+- **map**
+	- *Vector/Matrix*: Fn(&T, &T) -> T
+		- Uses the two corresponding elements
+- **map_enumerate**
+	- *Vector*: Fn(usize, &T, &T) -> T
+		- Uses the index and the two corresponding elements
+	- *Matrix*: Fn(usize, usize, &T, &T) -> T
+		- Uses the row index, column index, and the two corresponding elements
+
+#### Example
 ```
 use simp_linalg::prelude::*;
 
