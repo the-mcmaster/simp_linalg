@@ -5,7 +5,6 @@ mod map;
 
 use crate::matrix::Matrix;
 
-#[allow(dead_code)]
 #[derive(Debug, PartialEq, Eq, Clone, Default)]
 /// The Vector type.
 pub struct Vector<T>
@@ -13,7 +12,6 @@ pub struct Vector<T>
     list : Vec<T>
 }
 
-#[allow(dead_code)]
 impl<T> Vector<T>
 {
     /// Converts a Vector into a column Matrix, consuming the Vector.

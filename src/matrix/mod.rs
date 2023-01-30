@@ -15,7 +15,6 @@ pub struct Matrix<T>
     matrix : Vec<Vec<T>>
 }
 
-#[allow(dead_code)]
 impl<T> Matrix<T>
 where
     T: Copy
