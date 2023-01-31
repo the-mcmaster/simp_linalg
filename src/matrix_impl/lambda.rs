@@ -1,4 +1,4 @@
-use crate::matrix::Matrix;
+use crate::matrix_impl::Matrix;
 
 impl<T> Matrix<T> {
     /// Applies a function dependent on value
@@ -6,15 +6,16 @@ impl<T> Matrix<T> {
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::matrix::Matrix;
+    /// use simp_linalg::matrix_impl::Matrix;
+    /// use simp_linalg::matrix;
     /// 
-    /// let matrix1 = Matrix::from(vec![vec![1, 2],
-    ///                                 vec![3, 4]]);
+    /// let matrix1 = matrix![[1, 2],
+    ///                       [3, 4]];
     /// 
     /// let matrix2 = matrix1.lambda(|val| val * val);
     /// 
-    /// assert_eq!(matrix2, Matrix::from(vec![vec![1, 4],
-    ///                                       vec![9, 16]]));
+    /// assert_eq!(matrix2, matrix![[1, 4],
+    ///                             [9, 16]]);
     /// ```
     pub fn lambda<F>(&self, funct: F) -> Matrix<T>
     where
@@ -41,15 +42,16 @@ impl<T> Matrix<T> {
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::matrix::Matrix;
+    /// use simp_linalg::matrix_impl::Matrix;
+    /// use simp_linalg::matrix;
     /// 
-    /// let matrix1 = Matrix::from(vec![vec![1, 2],
-    ///                                 vec![3, 4]]);
+    /// let matrix1 = matrix![[1, 2],
+    ///                       [3, 4]];
     /// 
     /// let matrix2 = matrix1.lambda_index(|row, col| row * col + row + col);
     /// 
-    /// assert_eq!(matrix2, Matrix::from(vec![vec![0, 1],
-    ///                                       vec![1, 3]]));
+    /// assert_eq!(matrix2, matrix![[0, 1],
+    ///                             [1, 3]]);
     /// ```
     pub fn lambda_index<F>(&self, funct : F) -> Matrix<T>
     where
@@ -76,15 +78,16 @@ impl<T> Matrix<T> {
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::matrix::Matrix;
+    /// use simp_linalg::matrix_impl::Matrix;
+    /// use simp_linalg::matrix;
     /// 
-    /// let matrix1 = Matrix::from(vec![vec![1, 2],
-    ///                                 vec![3, 4]]);
+    /// let matrix1 = matrix![[1, 2],
+    ///                       [3, 4]];
     /// 
     /// let matrix2 = matrix1.lambda_enumerate(|row, col, val| row + col + val);
     /// 
-    /// assert_eq!(matrix2, Matrix::from(vec![vec![1, 3],
-    ///                                       vec![4, 6]]));
+    /// assert_eq!(matrix2, matrix![[1, 3],
+    ///                             [4, 6]]);
     /// ```
     pub fn lambda_enumerate<F>(&self, funct : F) -> Matrix<T>
     where

@@ -1,4 +1,4 @@
-use crate::vector::Vector;
+use crate::vector_impl::Vector;
 
 impl<T> Vector<T> {
     /// Applies a function dependent on value
@@ -6,14 +6,15 @@ impl<T> Vector<T> {
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::vector::Vector;
+    /// use simp_linalg::vector_impl::Vector;
+    /// use simp_linalg::vector;
     /// 
-    /// let vector_x = Vector::from(vec![1, 2, 3]);
-    /// let vector_y = Vector::from(vec![4, 5, 6]);
+    /// let vector_x = vector![1, 2, 3];
+    /// let vector_y = vector![4, 5, 6];
     /// 
     /// let vector_z = vector_x.map(&vector_y, |val1, val2| val1 * val2);
     /// 
-    /// assert_eq!(vector_z, Vector::from(vec![4, 10, 18]))
+    /// assert_eq!(vector_z, vector![4, 10, 18])
     /// ```
     /// 
     /// # Panic!
@@ -65,14 +66,15 @@ impl<T> Vector<T> {
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::vector::Vector;
+    /// use simp_linalg::vector_impl::Vector;
+    /// use simp_linalg::vector;
     /// 
-    /// let vector_x = Vector::from(vec![1, 2, 3]);
-    /// let vector_y = Vector::from(vec![4, 5, 6]);
+    /// let vector_x = vector![1, 2, 3];
+    /// let vector_y = vector![4, 5, 6];
     /// 
     /// let vector_z = vector_x.map_enumerate(&vector_y, |idx, val1, val2| val1 * val2 + idx);
     /// 
-    /// assert_eq!(vector_z, Vector::from(vec![4, 11, 20]))
+    /// assert_eq!(vector_z, vector![4, 11, 20])
     /// ```
     /// 
     /// # Panic!
