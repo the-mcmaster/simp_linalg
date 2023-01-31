@@ -3,7 +3,7 @@ mod add_impl;
 mod lambda;
 mod map;
 
-use crate::vector::Vector;
+use crate::vector_impl::Vector;
 
 #[allow(dead_code)]
 #[derive(Debug, PartialEq, Eq, Clone, Default)]
@@ -15,7 +15,6 @@ pub struct Matrix<T>
     matrix : Vec<Vec<T>>
 }
 
-#[allow(dead_code)]
 impl<T> Matrix<T>
 where
     T: Copy
@@ -24,16 +23,16 @@ where
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::vector::Vector;
-    /// use simp_linalg::matrix::Matrix;
+    /// use simp_linalg::prelude::*;
     /// 
-    /// let row_matrix = Matrix::from(vec![vec![1, 2, 4]]);
-    /// let col_matrix = Matrix::from(vec![vec![1],
-    ///                                    vec![2],
-    ///                                    vec![3]]);
+    /// let row_matrix = matrix![[1, 2, 4]];
     /// 
-    /// assert_eq!(row_matrix.into_vector(), Vector::from(vec![1, 2, 4]));
-    /// assert_eq!(col_matrix.into_vector(), Vector::from(vec![1, 2, 3]));
+    /// let col_matrix = matrix![[1],
+    ///                          [2],
+    ///                          [3]];
+    /// 
+    /// assert_eq!(row_matrix.into_vector(), vector![1, 2, 4]);
+    /// assert_eq!(col_matrix.into_vector(), vector![1, 2, 3]);
     /// ```
     /// # Panic!
     /// This function will panic if neither rows nor columns are equal to 1.
@@ -41,11 +40,13 @@ where
     /// ```
     /// use simp_linalg::prelude::*;
     /// 
-    /// let row_matrix = Matrix::from(vec![vec![1,2]]);
-    /// let col_matrix = Matrix::from(vec![vec![1],
-    ///                                    vec![2]]);
-    /// let both_matrix = Matrix::from(vec![vec![1,2],
-    ///                                     vec![3,4]]);
+    /// let row_matrix = matrix![[1,2]];
+    /// 
+    /// let col_matrix = matrix![[1],
+    ///                          [2]];
+    /// 
+    /// let both_matrix = matrix![[1,2],
+    ///                           [3,4]];
     /// 
     /// let vector1 = row_matrix.into_vector();
     /// let vector2 = col_matrix.into_vector();
@@ -102,13 +103,14 @@ impl<T> Matrix<T> {
 /// 
 /// ## Example
 /// ```
-/// use simp_linalg::matrix::Matrix;
+/// use simp_linalg::matrix_impl::Matrix;
+/// use simp_linalg::matrix;
 /// 
-/// let matrix1 = Matrix::from(vec![vec![1, 0],
-///                                 vec![1, 2]]);
+/// let matrix1 = matrix![[1, 0],
+///                       [1, 2]];
 /// //This will panic.
-/// //let matrix2 = Matrix::from(vec![vec![1],
-/// //                                vec![1, 2]]);
+/// //let matrix2 = matrix![[1],
+/// //                      [1, 2]];
 /// ```
 impl<T> From<Vec<Vec<T>>> for Matrix<T> {
     fn from(params: Vec<Vec<T>>) -> Self {

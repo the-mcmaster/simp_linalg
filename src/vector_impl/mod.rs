@@ -3,9 +3,8 @@ mod add_impl;
 mod lambda;
 mod map;
 
-use crate::matrix::Matrix;
+use crate::matrix_impl::Matrix;
 
-#[allow(dead_code)]
 #[derive(Debug, PartialEq, Eq, Clone, Default)]
 /// The Vector type.
 pub struct Vector<T>
@@ -13,7 +12,6 @@ pub struct Vector<T>
     list : Vec<T>
 }
 
-#[allow(dead_code)]
 impl<T> Vector<T>
 {
     /// Converts a Vector into a column Matrix, consuming the Vector.
@@ -22,13 +20,15 @@ impl<T> Vector<T>
     /// ```
     /// use simp_linalg::prelude::*;
     /// 
-    /// let vector = Vector::from(vec![1, 2, 3]);
+    /// let vector = vector![1, 2, 3];
     /// 
     /// let col_matrix = vector.into_col_matrix();
     /// 
-    /// assert_eq!(col_matrix, Matrix::from(vec![vec![1],
-    ///                                          vec![2],
-    ///                                          vec![3]]));
+    /// assert_eq!(col_matrix, matrix![
+    ///     [1],
+    ///     [2],
+    ///     [3]
+    /// ]);
     /// 
     /// ```
     /// The internal type of the vector does not need to implement traits
@@ -36,12 +36,14 @@ impl<T> Vector<T>
     /// ```
     /// use simp_linalg::prelude::*;
     /// 
-    /// let vector = Vector::from(vec![vec!["woah"], vec!["what"]]);
+    /// let vector = vector![vec!["woah"], vec!["what"]];
     /// 
     /// let col_matrix = vector.into_col_matrix();
     /// 
-    /// assert_eq!(col_matrix, Matrix::from(vec![vec![vec!["woah"]],
-    ///                                          vec![vec!["what"]]]));
+    /// assert_eq!(col_matrix, matrix![
+    ///     [vec!["woah"]],
+    ///     [vec!["what"]]
+    /// ]);
     /// ```
     pub fn into_col_matrix(self) -> Matrix<T> {
         let mut matrix = Vec::with_capacity(self.len());
@@ -59,22 +61,26 @@ impl<T> Vector<T>
     /// ```
     /// use simp_linalg::prelude::*;
     /// 
-    /// let vector = Vector::from(vec![1, 2, 3]);
+    /// let vector = vector![1, 2, 3];
     /// 
     /// let col_matrix = vector.into_row_matrix();
     /// 
-    /// assert_eq!(col_matrix, Matrix::from(vec![vec![1, 2, 3]]));
+    /// assert_eq!(col_matrix, matrix![
+    ///     [1, 2, 3]
+    /// ]);
     /// ```
     /// The internal type of the vector does not need to implement traits
     /// like [Copy] or [Sized] to convert.
     /// ```
     /// use simp_linalg::prelude::*;
     /// 
-    /// let vector = Vector::from(vec![vec!["woah"], vec!["what"]]);
+    /// let vector = vector![vec!["woah"], vec!["what"]];
     /// 
     /// let col_matrix = vector.into_row_matrix();
     /// 
-    /// assert_eq!(col_matrix, Matrix::from(vec![vec![vec!["woah"], vec!["what"]]]));
+    /// assert_eq!(col_matrix, matrix![
+    ///     [vec!["woah"], vec!["what"]]
+    /// ]);
     /// ```
     pub fn into_row_matrix(self) -> Matrix<T> {
         Matrix::from(vec![self.list])
@@ -105,13 +111,14 @@ impl<T> Vector<T>
 /// 
 /// # Example
 /// ```
-/// use simp_linalg::vector::Vector;
+/// use simp_linalg::vector_impl::Vector;
+/// use simp_linalg::vector;
 /// 
-/// let vector1 = Vector::from(vec![1, 2, 3, 4]);
-/// let vector2 = Vector::from(vec![1.7, -0.03]);
+/// let vector1 = vector![1, 2, 3, 4];
+/// let vector2 = vector![1.7, -0.03];
 /// 
 /// // Vectors can be constructed with any std::vec::Vec.
-/// let vector3 = Vector::from(vec!["Hello", "I'm in the vector!"]);
+/// let vector3 = vector!["Hello", "I'm in the vector!"];
 /// ```
 impl<T> From<Vec<T>> for Vector<T>
 {

@@ -1,5 +1,5 @@
 use std::ops::{Mul, AddAssign};
-use crate::vector::Vector;
+use crate::vector_impl::Vector;
 
 //
 //
@@ -12,10 +12,11 @@ use crate::vector::Vector;
 /// 
 /// # Example
 /// ```
-/// use simp_linalg::vector::Vector;
+/// use simp_linalg::vector_impl::Vector;
+/// use simp_linalg::vector;
 /// 
-/// let vector1 = Vector::from(vec![1, 2, 3]);
-/// let vector2 = Vector::from(vec![4, 5, 6]);
+/// let vector1 = vector![1, 2, 3];
+/// let vector2 = vector![4, 5, 6];
 /// 
 /// let value = &vector1 * &vector2;
 /// 
@@ -57,10 +58,11 @@ where
 /// 
 /// # Example
 /// ```
-/// use simp_linalg::vector::Vector;
+/// use simp_linalg::vector_impl::Vector;
+/// use simp_linalg::vector;
 /// 
-/// let vector1 = Vector::from(vec![1, 2, 3]);
-/// let vector2 = Vector::from(vec![4, 5, 6]);
+/// let vector1 = vector![1, 2, 3];
+/// let vector2 = vector![4, 5, 6];
 /// 
 /// // Notice 'vector2' is moved here.
 /// let value = &vector1 * vector2;
@@ -103,10 +105,11 @@ where
 /// 
 /// # Example
 /// ```
-/// use simp_linalg::vector::Vector;
+/// use simp_linalg::vector_impl::Vector;
+/// use simp_linalg::vector;
 /// 
-/// let vector1 = Vector::from(vec![1, 2, 3]);
-/// let vector2 = Vector::from(vec![4, 5, 6]);
+/// let vector1 = vector![1, 2, 3];
+/// let vector2 = vector![4, 5, 6];
 /// 
 /// // Notice 'vector1' is moved here.
 /// let value = vector1 * &vector2;
@@ -149,10 +152,11 @@ where
 /// 
 /// # Example
 /// ```
-/// use simp_linalg::vector::Vector;
+/// use simp_linalg::vector_impl::Vector;
+/// use simp_linalg::vector;
 /// 
-/// let vector1 = Vector::from(vec![1, 2, 3]);
-/// let vector2 = Vector::from(vec![4, 5, 6]);
+/// let vector1 = vector![1, 2, 3];
+/// let vector2 = vector![4, 5, 6];
 /// 
 /// // Notice 'vector1' and 'vector2' are moved here.
 /// let value = vector1 * &vector2;
@@ -196,11 +200,12 @@ where
 /// 
 /// # Example
 /// ```
-/// use simp_linalg::vector::Vector;
+/// use simp_linalg::vector_impl::Vector;
+/// use simp_linalg::vector;
 /// 
-/// let vector = Vector::from(vec![1, 2, 3]);
+/// let vector = vector![1, 2, 3];
 /// 
-/// assert_eq!(&vector * 3, Vector::from(vec![3, 6, 9]))
+/// assert_eq!(&vector * 3, vector![3, 6, 9])
 /// ```
 impl<T> Mul<T> for &Vector<T>
 where
@@ -229,12 +234,13 @@ where
 /// 
 /// # Example
 /// ```
-/// use simp_linalg::vector::Vector;
+/// use simp_linalg::vector_impl::Vector;
+/// use simp_linalg::vector;
 /// 
-/// let vector = Vector::from(vec![1, 2, 3]);
+/// let vector = vector![1, 2, 3];
 /// 
 /// // Notice that the vector is moved here.
-/// assert_eq!(vector * 3, Vector::from(vec![3, 6, 9]))
+/// assert_eq!(&vector * 3, vector![3, 6, 9])
 /// ```
 impl<T> Mul<T> for Vector<T>
 where

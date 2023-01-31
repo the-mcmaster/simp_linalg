@@ -1,4 +1,4 @@
-use crate::vector::Vector;
+use crate::vector_impl::Vector;
 
 impl<T> Vector<T> {
     /// Applies an anonymous function relative to value
@@ -7,14 +7,15 @@ impl<T> Vector<T> {
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::vector::Vector;
+    /// use simp_linalg::vector_impl::Vector;
+    /// use simp_linalg::vector;
     /// 
-    /// let vector_x = Vector::from(vec![1, 2, 3]);
+    /// let vector_x = vector![1, 2, 3];
     /// 
     /// // squares each element in vector_x
     /// let vector_y = vector_x.lambda(|val| val * val);
     /// 
-    /// assert_eq!(vector_y, Vector::from(vec![1, 4, 9]))
+    /// assert_eq!(vector_y, vector![1, 4, 9])
     /// ```
     pub fn lambda<F>(&self, funct: F) -> Vector<T>
     where
@@ -35,14 +36,15 @@ impl<T> Vector<T> {
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::vector::Vector;
+    /// use simp_linalg::vector_impl::Vector;
+    /// use simp_linalg::vector;
     /// 
-    /// let vector_x = Vector::from(vec![0, 0, 0]);
+    /// let vector_x = vector![0, 0, 0];
     /// 
     /// // counts upwards starting from 1
     /// let vector_y = vector_x.lambda_index(|idx| idx + 1);
     /// 
-    /// assert_eq!(vector_y, Vector::from(vec![1, 2, 3]))
+    /// assert_eq!(vector_y, vector![1, 2, 3])
     /// ```
     pub fn lambda_index<F>(&self, funct : F) -> Vector<T>
     where
@@ -63,13 +65,14 @@ impl<T> Vector<T> {
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::vector::Vector;
+    /// use simp_linalg::vector_impl::Vector;
+    /// use simp_linalg::vector;
     /// 
-    /// let vector_x = Vector::from(vec![1, 2, 3]);
+    /// let vector_x = vector![1, 2, 3];
     /// 
     /// let vector_y = vector_x.lambda_enumerate(|idx, val| idx * val);
     /// 
-    /// assert_eq!(vector_y, Vector::from(vec![0, 2, 6]))
+    /// assert_eq!(vector_y, vector![0, 2, 6])
     /// ```
     pub fn lambda_enumerate<F>(&self, funct : F) -> Vector<T>
     where

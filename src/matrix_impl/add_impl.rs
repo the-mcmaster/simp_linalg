@@ -1,5 +1,5 @@
 use std::ops::Add;
-use crate::matrix::Matrix;
+use crate::matrix_impl::Matrix;
 
 //
 //
@@ -10,21 +10,22 @@ use crate::matrix::Matrix;
 /// 
 /// # Example
 /// ```
-/// use simp_linalg::matrix::Matrix;
+/// use simp_linalg::matrix_impl::Matrix;
+/// use simp_linalg::matrix;
 /// 
-/// let matrix1 = Matrix::from(vec![vec![1, 2],
-///                                 vec![3, 4],
-///                                 vec![5, 6]]);
+/// let matrix1 = matrix![[1, 2],
+///                       [3, 4],
+///                       [5, 6]];
 /// 
-/// let matrix2 = Matrix::from(vec![vec![7,  8],
-///                                 vec![9,  10],
-///                                 vec![11, 12]]);
+/// let matrix2 = matrix![[7,  8],
+///                       [9,  10],
+///                       [11, 12]];
 /// 
 /// let matrix3 = &matrix1 + &matrix2;
 /// 
-/// assert_eq!(matrix3, Matrix::from(vec![vec![8,  10],
-///                                       vec![12, 14],
-///                                       vec![16, 18]]));
+/// assert_eq!(matrix3, matrix![[8,  10],
+///                             [12, 14],
+///                             [16, 18]]);
 /// ```
 /// 
 /// # Panic!
@@ -62,41 +63,43 @@ where
 /// 
 /// # Example
 /// ```
-/// use simp_linalg::matrix::Matrix;
+/// use simp_linalg::matrix_impl::Matrix;
+/// use simp_linalg::matrix;
 /// 
-/// let matrix1 = Matrix::from(vec![vec![1, 2],
-///                                 vec![3, 4],
-///                                 vec![5, 6]]);
+/// let matrix1 = matrix![[1, 2],
+///                       [3, 4],
+///                       [5, 6]];
 /// 
-/// let matrix2 = Matrix::from(vec![vec![7,  8],
-///                                 vec![9,  10],
-///                                 vec![11, 12]]);
+/// let matrix2 = matrix![[7,  8],
+///                       [9,  10],
+///                       [11, 12]];
 /// 
 /// let matrix3 = &matrix1 + matrix2;
 /// 
-/// assert_eq!(matrix3, Matrix::from(vec![vec![8,  10],
-///                                       vec![12, 14],
-///                                       vec![16, 18]]));
+/// assert_eq!(matrix3, matrix![[8,  10],
+///                             [12, 14],
+///                             [16, 18]]);
 /// ```
 /// This is useful for addition of matrices that are scaled.
 /// ```
-/// use simp_linalg::matrix::Matrix;
+/// use simp_linalg::matrix_impl::Matrix;
+/// use simp_linalg::matrix;
 /// 
-/// let matrix1 = Matrix::from(vec![vec![1, 2],
-///                                 vec![3, 4],
-///                                 vec![5, 6]]);
+/// let matrix1 = matrix![[1, 2],
+///                       [3, 4],
+///                       [5, 6]];
 /// 
-/// let matrix2 = Matrix::from(vec![vec![7,  8],
-///                                 vec![9,  10],
-///                                 vec![11, 12]]);
+/// let matrix2 = matrix![[7,  8],
+///                       [9,  10],
+///                       [11, 12]];
 /// 
 /// // The result of '&matrix2 * 2' is an owned Matrix,
 /// // which is then added to '&matrix1'.
 /// let matrix3 = &matrix1 + &matrix2 * 2;
 /// 
-/// assert_eq!(matrix3, Matrix::from(vec![vec![15, 18],
-///                                       vec![21, 24],
-///                                       vec![27, 30]]));
+/// assert_eq!(matrix3, matrix![[15, 18],
+///                             [21, 24],
+///                             [27, 30]]);
 /// ```
 /// 
 /// # Panic!
@@ -134,41 +137,43 @@ where
 /// 
 /// # Example
 /// ```
-/// use simp_linalg::matrix::Matrix;
+/// use simp_linalg::matrix_impl::Matrix;
+/// use simp_linalg::matrix;
 /// 
-/// let matrix1 = Matrix::from(vec![vec![1, 2],
-///                                 vec![3, 4],
-///                                 vec![5, 6]]);
+/// let matrix1 = matrix![[1, 2],
+///                       [3, 4],
+///                       [5, 6]];
 /// 
-/// let matrix2 = Matrix::from(vec![vec![7,  8],
-///                                 vec![9,  10],
-///                                 vec![11, 12]]);
+/// let matrix2 = matrix![[7,  8],
+///                       [9,  10],
+///                       [11, 12]];
 /// 
 /// let matrix3 = matrix1 + &matrix2;
 /// 
-/// assert_eq!(matrix3, Matrix::from(vec![vec![8,  10],
-///                                       vec![12, 14],
-///                                       vec![16, 18]]));
+/// assert_eq!(matrix3, matrix![[8,  10],
+///                             [12, 14],
+///                             [16, 18]]);
 /// ```
 /// This is useful for addition of matrices that are scaled.
 /// ```
-/// use simp_linalg::matrix::Matrix;
+/// use simp_linalg::matrix_impl::Matrix;
+/// use simp_linalg::matrix;
 /// 
-/// let matrix1 = Matrix::from(vec![vec![1, 2],
-///                                 vec![3, 4],
-///                                 vec![5, 6]]);
+/// let matrix1 = matrix![[1, 2],
+///                       [3, 4],
+///                       [5, 6]];
 /// 
-/// let matrix2 = Matrix::from(vec![vec![7,  8],
-///                                 vec![9,  10],
-///                                 vec![11, 12]]);
+/// let matrix2 = matrix![[7,  8],
+///                       [9,  10],
+///                       [11, 12]];
 /// 
 /// // The result of '&matrix1 * 2' is an owned Matrix,
 /// // which is then added to '&matrix2'.
 /// let matrix3 = &matrix1 * 2 + &matrix2;
 /// 
-/// assert_eq!(matrix3, Matrix::from(vec![vec![9,  12],
-///                                       vec![15, 18],
-///                                       vec![21, 24]]));
+/// assert_eq!(matrix3, matrix![[9,  12],
+///                             [15, 18],
+///                             [21, 24]]);
 /// ```
 /// 
 /// # Panic!
@@ -206,41 +211,43 @@ where
 /// 
 /// # Example
 /// ```
-/// use simp_linalg::matrix::Matrix;
+/// use simp_linalg::matrix_impl::Matrix;
+/// use simp_linalg::matrix;
 /// 
-/// let matrix1 = Matrix::from(vec![vec![1, 2],
-///                                 vec![3, 4],
-///                                 vec![5, 6]]);
+/// let matrix1 = matrix![[1, 2],
+///                       [3, 4],
+///                       [5, 6]];
 /// 
-/// let matrix2 = Matrix::from(vec![vec![7,  8],
-///                                 vec![9,  10],
-///                                 vec![11, 12]]);
+/// let matrix2 = matrix![[7,  8],
+///                       [9,  10],
+///                       [11, 12]];
 /// 
 /// let matrix3 = matrix1 + matrix2;
 /// 
-/// assert_eq!(matrix3, Matrix::from(vec![vec![8,  10],
-///                                       vec![12, 14],
-///                                       vec![16, 18]]));
+/// assert_eq!(matrix3, matrix![[8,  10],
+///                             [12, 14],
+///                             [16, 18]]);
 /// ```
 /// This is useful for addition of matrices that are scaled.
 /// ```
-/// use simp_linalg::matrix::Matrix;
+/// use simp_linalg::matrix_impl::Matrix;
+/// use simp_linalg::matrix;
 /// 
-/// let matrix1 = Matrix::from(vec![vec![1, 2],
-///                                 vec![3, 4],
-///                                 vec![5, 6]]);
+/// let matrix1 = matrix![[1, 2],
+///                       [3, 4],
+///                       [5, 6]];
 /// 
-/// let matrix2 = Matrix::from(vec![vec![7,  8],
-///                                 vec![9,  10],
-///                                 vec![11, 12]]);
+/// let matrix2 = matrix![[7,  8],
+///                       [9,  10],
+///                       [11, 12]];
 /// 
 /// // The result of '&matrix1 * 2' is an owned Matrix,
 /// // which is then added to another owned matrix '&matrix2 * 3'.
 /// let matrix3 = &matrix1 * 2 + &matrix2 * 3;
 /// 
-/// assert_eq!(matrix3, Matrix::from(vec![vec![23, 28],
-///                                       vec![33, 38],
-///                                       vec![43, 48]]));
+/// assert_eq!(matrix3, matrix![[23, 28],
+///                             [33, 38],
+///                             [43, 48]]);
 /// ```
 /// 
 /// # Panic!
