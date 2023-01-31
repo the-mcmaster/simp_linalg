@@ -51,7 +51,7 @@ fn lambda_example() {
     let new_matrix = matrix.lambda(|val| val * val);
 
     // tests
-    assert_eq!(new_vector, Vector::from(vec![1, 4, 9]));
+    assert_eq!(new_vector, vector![1, 4, 9]);
     assert_eq!(new_matrix, matrix![[1,4],
                                    [9,16]])
 }
