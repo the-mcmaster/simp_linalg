@@ -1,3 +1,5 @@
+mod mut_impls;
+
 mod mul_impl;
 mod add_impl;
 mod lambda;
@@ -128,6 +130,29 @@ impl<T> From<Vec<Vec<T>>> for Matrix<T> {
             rows : params.len(),
             cols : params[0].len(),
             matrix : params
+        }
+    }
+}
+
+impl<T> From<&Vec<Vec<T>>> for Matrix<T>
+where
+    T: Copy
+{
+    fn from(params: &Vec<Vec<T>>) -> Self {
+
+        let rows = params.len();
+        let cols = params[0].len();
+
+        for row in 1..rows {
+            if params[row].len() != cols {
+                panic!("Input 2D Vec does not have same length for all rows")
+            }
+        }
+
+        Matrix {
+            rows : params.len(),
+            cols : params[0].len(),
+            matrix : params.to_vec()
         }
     }
 }
