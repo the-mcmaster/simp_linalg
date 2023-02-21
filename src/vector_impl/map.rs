@@ -1,13 +1,16 @@
-use crate::vector_impl::Vector;
+use crate::vector_impl::{Vector, traits::VectorMap};
 
-impl<T> Vector<T> {
+impl<'a, T> VectorMap<T> for &'a Vector<T> {
+    type Other = &'a Vector<T>;
+
+    type Output = Vector<T>;
+
     /// Applies a function dependent on value
     /// to each corresponding element between the two vectors. 
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::vector_impl::Vector;
-    /// use simp_linalg::vector;
+    /// use simp_linalg::vector_impl::prelude::*;
     /// 
     /// let vector_x = vector![1, 2, 3];
     /// let vector_y = vector![4, 5, 6];
@@ -20,10 +23,9 @@ impl<T> Vector<T> {
     /// # Panic!
     /// This function will panic if the two vectors are not identically
     /// sized.
-    pub fn map<F>(&self, other: &Vector<T>, funct: F) -> Vector<T>
+    fn map<F>(self, other: Self::Other, funct: F) -> Self::Output
     where
-        F: Fn(&T, &T) -> T
-    {
+        F: Fn(&T, &T) -> T {
         if self.len() != other.len() { 
             panic!("Cannot map vectors of different lengths.")
         }
@@ -39,35 +41,13 @@ impl<T> Vector<T> {
 
         Vector::from(params)
     }
-    
-    /*
-        For anyone following the source code, lambda.rs
-        has a function called 'lambda_index' while map.rs
-        does not. This is on purpose, as it is pointless.
 
-        Consider what the generic function definition
-        would be for a map_index.
-        
-        This is what it would be:
-            F: Fn(usize) -> T
-        
-        This is already used for lambda_index.
-
-        Additionally, the vectors are independent from
-        the function definition, and no actual mapping
-        will be done.
-        
-        Therefore, it is pointless to add the method 'map_index',
-        as it does not make sense.
-    */
-    
     /// Applies a function dependent on value and location 
     /// to each corresponding element between the two vectors. 
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::vector_impl::Vector;
-    /// use simp_linalg::vector;
+    /// use simp_linalg::vector_impl::prelude::*;
     /// 
     /// let vector_x = vector![1, 2, 3];
     /// let vector_y = vector![4, 5, 6];
@@ -80,10 +60,9 @@ impl<T> Vector<T> {
     /// # Panic!
     /// This function will panic if the two vectors are not identically
     /// sized.
-    pub fn map_enumerate<F>(&self, other: &Vector<T>, funct: F) -> Vector<T>
+    fn map_enumerate<F>(self, other: Self::Other, funct: F) -> Self::Output
     where
-        F: Fn(usize, &T, &T) -> T
-    {
+        F: Fn(usize, &T, &T) -> T {
         if self.len() != other.len() { 
             panic!("Cannot map vectors of different lengths.")
         }

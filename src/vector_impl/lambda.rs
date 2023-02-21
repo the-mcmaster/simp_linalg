@@ -1,14 +1,15 @@
-use crate::vector_impl::Vector;
+use crate::vector_impl::{Vector, traits::VectorLambda};
 
-impl<T> Vector<T> {
+impl<'a, T> VectorLambda<T> for &'a Vector<T> {
+    type Output = Vector<T>;
+
     /// Applies an anonymous function relative to value
     /// to each element of the vector and returns a vector 
     /// with the corresponding results.
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::vector_impl::Vector;
-    /// use simp_linalg::vector;
+    /// use simp_linalg::vector_impl::prelude::*;
     /// 
     /// let vector_x = vector![1, 2, 3];
     /// 
@@ -17,10 +18,9 @@ impl<T> Vector<T> {
     /// 
     /// assert_eq!(vector_y, vector![1, 4, 9])
     /// ```
-    pub fn lambda<F>(&self, funct: F) -> Vector<T>
+    fn lambda<F>(self, funct: F) -> Self::Output
     where
-        F: Fn(&T) -> T
-    {
+        F: Fn(&T) -> T {
         let mut params = Vec::with_capacity(self.len());
         
         for item in self.list() {
@@ -29,15 +29,14 @@ impl<T> Vector<T> {
 
         Vector::from(params)
     }
-    
+
     /// Applies an anonymous function relative to location
     /// to each location of the vector and returns a vector
     /// with the corresponding results.
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::vector_impl::Vector;
-    /// use simp_linalg::vector;
+    /// use simp_linalg::vector_impl::prelude::*;
     /// 
     /// let vector_x = vector![0, 0, 0];
     /// 
@@ -46,10 +45,9 @@ impl<T> Vector<T> {
     /// 
     /// assert_eq!(vector_y, vector![1, 2, 3])
     /// ```
-    pub fn lambda_index<F>(&self, funct : F) -> Vector<T>
+    fn lambda_index<F>(self, funct : F) -> Self::Output
     where
-        F: Fn(usize) -> T
-    {
+        F: Fn(usize) -> T {
         let mut params = Vec::with_capacity(self.len());
         
         for item in 0..self.len() {
@@ -65,8 +63,7 @@ impl<T> Vector<T> {
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::vector_impl::Vector;
-    /// use simp_linalg::vector;
+    /// use simp_linalg::vector_impl::prelude::*;
     /// 
     /// let vector_x = vector![1, 2, 3];
     /// 
@@ -74,10 +71,9 @@ impl<T> Vector<T> {
     /// 
     /// assert_eq!(vector_y, vector![0, 2, 6])
     /// ```
-    pub fn lambda_enumerate<F>(&self, funct : F) -> Vector<T>
+    fn lambda_enumerate<F>(self, funct : F) -> Self::Output
     where
-        F: Fn(usize, &T) -> T
-    {
+        F: Fn(usize, &T) -> T {
         let mut params = Vec::with_capacity(self.len());
 
         for (idx, item) in self.list.iter().enumerate() {

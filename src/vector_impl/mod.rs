@@ -1,7 +1,11 @@
+mod mut_impls;
+
 mod mul_impl;
 mod add_impl;
 mod lambda;
 mod map;
+pub mod prelude;
+pub mod traits;
 
 use crate::matrix_impl::Matrix;
 
