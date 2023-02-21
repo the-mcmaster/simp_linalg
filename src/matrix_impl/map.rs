@@ -1,4 +1,4 @@
-use crate::matrix_impl::{Matrix, MatrixMap};
+use crate::matrix_impl::{Matrix, traits::MatrixMap};
 
 impl<'a, T> MatrixMap<T> for &'a Matrix<T> {
     type Other = &'a Matrix<T>;

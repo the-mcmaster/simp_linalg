@@ -1,4 +1,4 @@
-use crate::matrix_impl::{Matrix, MatrixLambda};
+use crate::matrix_impl::{Matrix, traits::MatrixLambda};
 
 impl<T> MatrixLambda<T> for &Matrix<T> {
     type Output = Matrix<T>;
@@ -9,7 +9,6 @@ impl<T> MatrixLambda<T> for &Matrix<T> {
     /// # Example
     /// ```
     /// use simp_linalg::matrix_impl::prelude::*;
-    /// use simp_linalg::matrix;
     /// 
     /// let matrix1 = matrix![[1, 2],
     ///                       [3, 4]];

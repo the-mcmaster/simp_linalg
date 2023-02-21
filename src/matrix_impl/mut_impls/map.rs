@@ -1,12 +1,16 @@
-use crate::matrix_impl::{MatrixMap, Matrix};
+use crate::matrix_impl::{traits::MatrixMap, Matrix};
 
+/// Unlike the &Matrix implementation of MatrixMap,
+/// this implementation returns the left-hand-side 
+/// borrowed mutable Matrix with changes applied.
 impl<'a, T> MatrixMap<T> for &'a mut Matrix<T> {
     type Other = &'a Matrix<T>;
 
     type Output = &'a mut Matrix<T>;
 
     /// Applies a function dependent on location and value 
-    /// to each corresponding element between the two matrices. 
+    /// to each corresponding element between the two matrices
+    /// and applies the transformation to the left-hand-side matrix.
     /// 
     /// # Example
     /// ```
@@ -47,9 +51,9 @@ impl<'a, T> MatrixMap<T> for &'a mut Matrix<T> {
         self
     }
 
-    /// Applies a function dependent on value 
-    /// to each corresponding element between
-    /// the two matrices. 
+    /// Applies a function dependent on value to each 
+    /// corresponding element between the two matrices 
+    /// and applies the transformation to the left-hand-side matrix.
     /// 
     /// # Example
     /// ```
