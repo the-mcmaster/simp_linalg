@@ -1,9 +1,9 @@
-use crate::matrix_impl::{Matrix, MatrixMap};
+use crate::matrix_impl::{MatrixMap, Matrix};
 
-impl<'a, T> MatrixMap<T> for &'a Matrix<T> {
+impl<'a, T> MatrixMap<T> for &'a mut Matrix<T> {
     type Other = &'a Matrix<T>;
 
-    type Output = Matrix<T>;
+    type Output = &'a mut Matrix<T>;
 
     /// Applies a function dependent on location and value 
     /// to each corresponding element between the two matrices. 
@@ -12,14 +12,15 @@ impl<'a, T> MatrixMap<T> for &'a Matrix<T> {
     /// ```
     /// use simp_linalg::matrix_impl::prelude::*;
     /// 
-    /// let matrix1 = matrix![[1, 2],
-    ///                       [3, 4]];
+    /// let mut matrix1 = matrix![[1, 2],
+    ///                           [3, 4]];
+    /// 
     /// let matrix2 = matrix![[5, 6],
     ///                       [7, 8]];
     /// 
-    /// let matrix3 = matrix1.map_enumerate(&matrix2, |row, col, val1, val2| val1 * val2 + (row * col + 1));
+    /// (&mut matrix1).map_enumerate(&matrix2, |row, col, val1, val2| val1 * val2 + (row * col + 1));
     /// 
-    /// assert_eq!(matrix3, matrix![[6,  13],
+    /// assert_eq!(matrix1, matrix![[6,  13],
     ///                             [22, 34]]);
     /// ```
     /// 
@@ -33,19 +34,17 @@ impl<'a, T> MatrixMap<T> for &'a Matrix<T> {
             panic!("Cannot map matrices of different sizes.")
         }
 
-        let mut params = Vec::with_capacity(self.rows);
-
         for row_idx in 0..self.rows {
-            let mut new_row = Vec::with_capacity(self.cols);
 
             for col_idx in 0..self.cols {
-                new_row.push(funct(row_idx, col_idx, &self.matrix[row_idx][col_idx], &other.matrix[row_idx][col_idx]))
+                self.matrix[row_idx][col_idx] = funct(
+                    row_idx, col_idx, &self.matrix[row_idx][col_idx], &other.matrix[row_idx][col_idx]
+                );
             }
 
-            params.push(new_row)
         }
 
-        Matrix::from(params)
+        self
     }
 
     /// Applies a function dependent on value 
@@ -56,15 +55,15 @@ impl<'a, T> MatrixMap<T> for &'a Matrix<T> {
     /// ```
     /// use simp_linalg::matrix_impl::prelude::*;
     /// 
-    /// let matrix1 = matrix![[1, 2],
-    ///                       [3, 4]];
+    /// let mut matrix1 = matrix![[1, 2],
+    ///                           [3, 4]];
     /// 
     /// let matrix2 = matrix![[5, 6],
     ///                       [7, 8]];
     /// 
-    /// let matrix3 = matrix1.map(&matrix2, |val1, val2| val1 * val2);
+    /// (&mut matrix1).map(&matrix2, |val1, val2| val1 * val2);
     /// 
-    /// assert_eq!(matrix3, matrix![[5,  12],
+    /// assert_eq!(matrix1, matrix![[5,  12],
     ///                             [21, 32]]);
     /// ```
     /// 
@@ -78,18 +77,16 @@ impl<'a, T> MatrixMap<T> for &'a Matrix<T> {
             panic!("Cannot map matrices of different sizes.")
         }
 
-        let mut params = Vec::with_capacity(self.rows);
-
         for row_idx in 0..self.rows {
-            let mut new_row = Vec::with_capacity(self.cols);
 
             for col_idx in 0..self.cols {
-                new_row.push(funct(&self.matrix[row_idx][col_idx], &other.matrix[row_idx][col_idx]))
+                self.matrix[row_idx][col_idx] = funct(
+                    &self.matrix[row_idx][col_idx], &other.matrix[row_idx][col_idx]
+                );
             }
-
-            params.push(new_row)
+            
         }
 
-        Matrix::from(params)
+        self
     }
 }

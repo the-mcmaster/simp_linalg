@@ -1,12 +1,14 @@
-use crate::matrix_impl::Matrix;
+use crate::matrix_impl::{Matrix, MatrixLambda};
 
-impl<T> Matrix<T> {
+impl<T> MatrixLambda<T> for &Matrix<T> {
+    type Output = Matrix<T>;
+
     /// Applies a function dependent on value
     /// to each individual element in the matrix.
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::matrix_impl::Matrix;
+    /// use simp_linalg::matrix_impl::prelude::*;
     /// use simp_linalg::matrix;
     /// 
     /// let matrix1 = matrix![[1, 2],
@@ -17,10 +19,9 @@ impl<T> Matrix<T> {
     /// assert_eq!(matrix2, matrix![[1, 4],
     ///                             [9, 16]]);
     /// ```
-    pub fn lambda<F>(&self, funct: F) -> Matrix<T>
+    fn lambda<F>(self, funct: F) -> Self::Output
     where
-        F: Fn(&T) -> T
-    {
+        F: Fn(&T) -> T {
         let mut params = Vec::with_capacity(self.rows);
         
         
@@ -42,8 +43,7 @@ impl<T> Matrix<T> {
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::matrix_impl::Matrix;
-    /// use simp_linalg::matrix;
+    /// use simp_linalg::matrix_impl::prelude::*;
     /// 
     /// let matrix1 = matrix![[1, 2],
     ///                       [3, 4]];
@@ -53,12 +53,10 @@ impl<T> Matrix<T> {
     /// assert_eq!(matrix2, matrix![[0, 1],
     ///                             [1, 3]]);
     /// ```
-    pub fn lambda_index<F>(&self, funct : F) -> Matrix<T>
+    fn lambda_index<F>(self, funct : F) -> Self::Output
     where
-        F: Fn(usize, usize) -> T
-    {
+        F: Fn(usize, usize) -> T {
         let mut params = Vec::with_capacity(self.rows);
-        
         
         for row_idx in 0..self.rows {
             let mut new_row = Vec::with_capacity(self.cols);
@@ -78,8 +76,7 @@ impl<T> Matrix<T> {
     /// 
     /// # Example
     /// ```
-    /// use simp_linalg::matrix_impl::Matrix;
-    /// use simp_linalg::matrix;
+    /// use simp_linalg::matrix_impl::prelude::*;
     /// 
     /// let matrix1 = matrix![[1, 2],
     ///                       [3, 4]];
@@ -89,10 +86,9 @@ impl<T> Matrix<T> {
     /// assert_eq!(matrix2, matrix![[1, 3],
     ///                             [4, 6]]);
     /// ```
-    pub fn lambda_enumerate<F>(&self, funct : F) -> Matrix<T>
+    fn lambda_enumerate<F>(self, funct : F) -> Self::Output
     where
-        F: Fn(usize, usize, &T) -> T
-    {
+        F: Fn(usize, usize, &T) -> T {
         let mut params = Vec::with_capacity(self.rows);
 
         for (row_idx, row) in self.matrix.iter().enumerate() {

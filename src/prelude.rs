@@ -1,3 +1,3 @@
-pub use crate::matrix_impl::Matrix;
+pub use crate::matrix_impl::prelude::*;
 pub use crate::vector_impl::Vector;
-pub use crate::{vector, matrix};
+pub use crate::vector;
