@@ -50,8 +50,8 @@ impl<'a, T> VectorLambda<T> for &'a Vector<T> {
         F: Fn(usize) -> T {
         let mut params = Vec::with_capacity(self.len());
         
-        for item in 0..self.len() {
-            params.push(funct(item))
+        for idx in 0..self.len() {
+            params.push(funct(idx))
         }
 
         Vector::from(params)

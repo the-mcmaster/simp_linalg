@@ -11,6 +11,14 @@ use crate::matrix_impl::Matrix;
 
 #[derive(Debug, PartialEq, Eq, Clone, Default)]
 /// The Vector type.
+/// 
+/// By default, overloaded addition and multiplication
+/// is implemented. However, other functionality like
+/// lambda and map functions are only available through
+/// using their associated traits 'VectorLambda' and 'VectorMap'.
+/// 
+/// The preludes in [Root Prelude][crate::prelude] and [Vector Prelude][crate::vector_impl::prelude]
+/// use these traits by default.
 pub struct Vector<T>
 {
     list : Vec<T>

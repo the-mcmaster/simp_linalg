@@ -1,5 +1,8 @@
 use crate::vector_impl::{Vector, traits::VectorMap};
 
+/// Unlike the &Vector implementation of VectorMap,
+/// this implementation returns the left-hand-side 
+/// borrowed mutable Vector with changes applied.
 impl<'a, T> VectorMap<T> for &'a mut Vector<T> {
     type Other = &'a Vector<T>;
 
