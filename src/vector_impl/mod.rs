@@ -1,5 +1,3 @@
-mod mut_impls;
-
 mod mul_impl;
 mod add_impl;
 mod lambda;
@@ -24,7 +22,7 @@ pub struct Vector<T>
     list : Vec<T>
 }
 
-impl<T> Vector<T>
+impl<'a, T> Vector<T>
 {
     /// Converts a Vector into a column Matrix, consuming the Vector.
     /// 
@@ -104,7 +102,7 @@ impl<T> Vector<T>
     }
 
     /// Borrows the list of elements in the Vector<T>.
-    pub fn list(&self) -> &Vec<T> {
+    pub fn list(&'a self) -> &'a Vec<T> {
         &self.list
     }
 

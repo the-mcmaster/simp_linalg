@@ -14,7 +14,7 @@ pub trait VectorLambda<T> {
         F: Fn(usize, &T) -> T;
 }
 
-pub trait VectorMap<T> {
+pub trait VectorMap<'a, T> {
     type Other;
     type Output;
 

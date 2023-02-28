@@ -8,3 +8,6 @@ license = "MIT"
 repository = "https://github.com/the-mcmaster/simp_linalg"
 keywords = ["linear-algebra", "vector", "matrix"]
 categories = ["mathematics", "science"]
+
+[dependencies]
+simp_linalg_proc_macro = { git = "https://github.com/the-mcmaster/simp_linalg_proc_macro.git" }
